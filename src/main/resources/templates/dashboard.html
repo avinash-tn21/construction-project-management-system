@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">C</div>
+            <div>
+                <h2>CONSTRUCT</h2>
+                <span>MANAGEMENT</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/dashboard" class="nav-item active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>◉</span>
+                Workforce
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="#" class="nav-item">
+                <span>☷</span>
+                Daily Logs
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+
+            <div>
+                <p class="welcome">Welcome back</p>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="profile">
+                <div class="avatar">S</div>
+                <div>
+                    <strong>Site Supervisor</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- Statistics -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon">▤</div>
+                <div>
+                    <p>Active Projects</p>
+                    <h2>3</h2>
+                    <span class="positive">↑ 12% this month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⌂</div>
+                <div>
+                    <p>Active Sites</p>
+                    <h2>2</h2>
+                    <span class="positive">All operational</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">◉</div>
+                <div>
+                    <p>Total Workers</p>
+                    <h2>42</h2>
+                    <span class="positive">36 present today</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⚙</div>
+                <div>
+                    <p>Equipment</p>
+                    <h2>18</h2>
+                    <span class="warning">4 allocated</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Main Grid -->
+        <section class="content-grid">
+
+            <!-- Progress -->
+            <div class="panel progress-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <p class="section-label">PROJECT OVERVIEW</p>
+                        <h2>Current Project Progress</h2>
+                    </div>
+
+                    <button class="view-button">View All</button>
+                </div>
+
+                <div class="project-progress">
+
+                    <div class="project-row">
+                        <div class="project-info">
+                            <strong>Colombo Office Complex</strong>
+                            <span>Foundation & structural work</span>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%;"></div>
+                            </div>
+                            <strong>72%</strong>
+                        </div>
+                    </div>
+
+                    <div class="project-row">
+                        <div class="project-info">
+                            <strong>Residential Development</strong>
+                            <span>Construction phase</span>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 48%;"></div>
+                            </div>
+                            <strong>48%</strong>
+                        </div>
+                    </div>
+
+                    <div class="project-row">
+                        <div class="project-info">
+                            <strong>Warehouse Project</strong>
+                            <span>Site preparation</span>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%;"></div>
+                            </div>
+                            <strong>25%</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Quick Actions -->
+            <div class="panel">
+
+                <div class="panel-header">
+                    <div>
+                        <p class="section-label">QUICK ACTIONS</p>
+                        <h2>Manage Site</h2>
+                    </div>
+                </div>
+
+                <div class="actions">
+
+                    <button class="action-button">
+                        <span>＋</span>
+                        <div>
+                            <strong>New Daily Log</strong>
+                            <small>Record today's activities</small>
+                        </div>
+                    </button>
+
+                    <button class="action-button">
+                        <span>＋</span>
+                        <div>
+                            <strong>Add Worker</strong>
+                            <small>Register workforce</small>
+                        </div>
+                    </button>
+
+                    <button class="action-button">
+                        <span>＋</span>
+                        <div>
+                            <strong>Material Request</strong>
+                            <small>Request site materials</small>
+                        </div>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Recent Activities -->
+        <section class="panel activity-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <p class="section-label">SITE MANAGEMENT</p>
+                    <h2>Recent Site Activities</h2>
+                </div>
+
+                <button class="view-button">View Logs</button>
+
+            </div>
+
+            <div class="activity-list">
+
+                <div class="activity">
+                    <div class="activity-icon">✓</div>
+
+                    <div>
+                        <strong>Foundation preparation completed</strong>
+                        <p>Main Construction Site · Today</p>
+                    </div>
+
+                    <span class="activity-status completed">Completed</span>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-icon">●</div>
+
+                    <div>
+                        <strong>Concrete work in progress</strong>
+                        <p>Main Construction Site · Today</p>
+                    </div>
+
+                    <span class="activity-status progress">In Progress</span>
+                </div>
+
+                <div class="activity">
+                    <div class="activity-icon">!</div>
+
+                    <div>
+                        <strong>Daily site log submitted</strong>
+                        <p>Main Construction Site · Yesterday</p>
+                    </div>
+
+                    <span class="activity-status completed">Recorded</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
