@@ -1,13 +1,18 @@
-POST http://localhost:8080/api/daily-site-logs
+### Create Site
+POST http://localhost:8080/api/sites
 Content-Type: application/json
 
 {
-  "siteId": 1,
-  "supervisorId": 1,
-  "logDate": "2026-09-02",
-  "weatherCondition": "Sunny",
-  "temperature": 30.5,
-  "activities": "Foundation preparation and concrete work",
-  "progressNotes": "Construction work progressed as planned",
-  "issues": "No major issues"
+  "projectId": 1,
+  "siteName": "Main Construction Site",
+  "location": "Colombo",
+  "status": "Active"
 }
+
+
+### Get All Sites
+GET http://localhost:8080/api/sites
+
+
+### Get Site By ID
+GET http://localhost:8080/api/sites/1

@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sites Management</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+
+        /* ===== Sites Page ===== */
+
+        .sites-page {
+            padding: 30px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .page-heading p {
+            margin-top: 6px;
+            color: #777;
+        }
+
+        .add-site-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .add-site-btn:hover {
+            background: #d68910;
+        }
+
+        /* ===== Summary Cards ===== */
+
+        .site-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .summary-card p {
+            margin: 0 0 8px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .summary-card h2 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        /* ===== Table ===== */
+
+        .sites-table-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            margin: 0;
+        }
+
+        .sites-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sites-table th {
+            text-align: left;
+            padding: 14px;
+            background: #f7f7f7;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .sites-table td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .sites-table tr:hover {
+            background: #fafafa;
+        }
+
+        /* ===== Status ===== */
+
+        .site-status {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* ===== Action Buttons ===== */
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* ===== Modal ===== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            width: 450px;
+            max-width: 90%;
+            margin: 7% auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #777;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* ===== Responsive ===== */
+
+        @media (max-width: 900px) {
+
+            .site-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .sites-page {
+                padding: 20px;
+            }
+
+            .page-heading {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                C
+            </div>
+
+            <div>
+
+                <h2>
+                    CONSTRUCT
+                </h2>
+
+                <span>
+                    MANAGEMENT
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects" class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="/sites" class="nav-item active">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <a href="/workforce" class="nav-item">
+                <span>◉</span>
+                Workforce
+            </a>
+
+            <a href="/inventory" class="nav-item">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment" class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs" class="nav-item">
+                <span>☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">
+                    Site Management
+                </p>
+
+                <h1>
+                    Sites
+                </h1>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="avatar">
+                    S
+                </div>
+
+                <div>
+
+                    <strong>
+                        Site Supervisor
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ================= SITES CONTENT ================= -->
+
+        <div class="sites-page">
+
+
+            <!-- Page Heading -->
+
+            <div class="page-heading">
+
+                <div>
+
+                    <h1>
+                        Construction Sites
+                    </h1>
+
+                    <p>
+                        Manage and monitor all construction sites.
+                    </p>
+
+                </div>
+
+
+                <button
+                        class="add-site-btn"
+                        onclick="openAddModal()">
+
+                    + Add Site
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ================= SUMMARY ================= -->
+
+            <div class="site-summary">
+
+
+                <div class="summary-card">
+
+                    <p>
+                        Total Sites
+                    </p>
+
+                    <h2 id="totalSites">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <p>
+                        Active Sites
+                    </p>
+
+                    <h2 id="activeSites">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <p>
+                        Other Sites
+                    </p>
+
+                    <h2 id="otherSites">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= TABLE ================= -->
+
+            <div class="sites-table-panel">
+
+
+                <div class="table-header">
+
+                    <div>
+
+                        <p class="section-label">
+                            SITE DIRECTORY
+                        </p>
+
+                        <h2>
+                            All Construction Sites
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+
+                <table class="sites-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Site Name
+                        </th>
+
+                        <th>
+                            Project ID
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="sitesTableBody">
+
+                    </tbody>
+
+                </table>
+
+
+                <p
+                        id="emptyMessage"
+                        style="display:none; text-align:center; padding:25px; color:#777;">
+
+                    No sites found.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- ================= ADD / EDIT MODAL ================= -->
+
+<div id="siteModal" class="modal">
+
+
+    <div class="modal-content">
+
+
+        <h2 id="modalTitle">
+            Add Site
+        </h2>
+
+
+        <input
+                type="hidden"
+                id="siteId">
+
+
+        <div class="form-group">
+
+            <label>
+                Project ID
+            </label>
+
+            <input
+                    type="number"
+                    id="projectId"
+                    placeholder="Enter project ID">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Site Name
+            </label>
+
+            <input
+                    type="text"
+                    id="siteName"
+                    placeholder="Enter site name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Location
+            </label>
+
+            <input
+                    type="text"
+                    id="location"
+                    placeholder="Enter location">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Status
+            </label>
+
+            <select id="status">
+
+                <option value="ACTIVE">
+                    Active
+                </option>
+
+                <option value="INACTIVE">
+                    Inactive
+                </option>
+
+                <option value="COMPLETED">
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                    class="cancel-btn"
+                    onclick="closeModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                    class="save-btn"
+                    onclick="saveSite()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+
+    // Load sites when page opens
+
+    loadSites();
+
+
+
+    // ==========================================
+    // LOAD SITES
+    // ==========================================
+
+    function loadSites() {
+
+        fetch('/api/sites')
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error('Could not load sites');
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(sites => {
+
+
+                const tableBody =
+                    document.getElementById('sitesTableBody');
+
+                const emptyMessage =
+                    document.getElementById('emptyMessage');
+
+
+                tableBody.innerHTML = '';
+
+
+                // Update summary
+
+                document.getElementById('totalSites')
+                    .textContent = sites.length;
+
+
+                const activeCount =
+                    sites.filter(site =>
+                        site.status &&
+                        site.status.toUpperCase() === 'ACTIVE'
+                    ).length;
+
+
+                document.getElementById('activeSites')
+                    .textContent = activeCount;
+
+
+                document.getElementById('otherSites')
+                    .textContent = sites.length - activeCount;
+
+
+
+                // No sites
+
+                if (sites.length === 0) {
+
+                    emptyMessage.style.display = 'block';
+
+                    return;
+
+                }
+
+
+                emptyMessage.style.display = 'none';
+
+
+
+                // Add rows
+
+                sites.forEach(site => {
+
+
+                    const row =
+                        document.createElement('tr');
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${site.siteId}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${site.siteName}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${site.projectId}
+                        </td>
+
+                        <td>
+                            ${site.location || '-'}
+                        </td>
+
+                        <td>
+
+                            <span class="site-status">
+
+                                ${site.status}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="edit-btn"
+                                onclick='editSite(${JSON.stringify(site)})'>
+
+                                Edit
+
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteSite(${site.siteId})">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+            })
+
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert('Failed to load sites.');
+
+            });
+
+    }
+
+
+
+    // ==========================================
+    // OPEN ADD MODAL
+    // ==========================================
+
+    function openAddModal() {
+
+
+        document.getElementById('modalTitle')
+            .textContent = 'Add Site';
+
+
+        document.getElementById('siteId')
+            .value = '';
+
+
+        document.getElementById('projectId')
+            .value = '';
+
+
+        document.getElementById('siteName')
+            .value = '';
+
+
+        document.getElementById('location')
+            .value = '';
+
+
+        document.getElementById('status')
+            .value = 'ACTIVE';
+
+
+        document.getElementById('siteModal')
+            .style.display = 'block';
+
+    }
+
+
+
+    // ==========================================
+    // EDIT SITE
+    // ==========================================
+
+    function editSite(site) {
+
+
+        document.getElementById('modalTitle')
+            .textContent = 'Edit Site';
+
+
+        document.getElementById('siteId')
+            .value = site.siteId;
+
+
+        document.getElementById('projectId')
+            .value = site.projectId;
+
+
+        document.getElementById('siteName')
+            .value = site.siteName;
+
+
+        document.getElementById('location')
+            .value = site.location || '';
+
+
+        document.getElementById('status')
+            .value = site.status;
+
+
+        document.getElementById('siteModal')
+            .style.display = 'block';
+
+    }
+
+
+
+    // ==========================================
+    // SAVE SITE
+    // ==========================================
+
+    function saveSite() {
+
+
+        const siteId =
+            document.getElementById('siteId').value;
+
+
+        const projectId =
+            document.getElementById('projectId').value;
+
+
+        const siteName =
+            document.getElementById('siteName').value.trim();
+
+
+        const location =
+            document.getElementById('location').value.trim();
+
+
+        const status =
+            document.getElementById('status').value;
+
+
+
+        // Validation
+
+        if (!projectId || !siteName) {
+
+            alert(
+                'Please enter Project ID and Site Name.'
+            );
+
+            return;
+
+        }
+
+
+
+        const site = {
+
+            projectId: parseInt(projectId),
+
+            siteName: siteName,
+
+            location: location,
+
+            status: status
+
+        };
+
+
+
+        let url = '/api/sites';
+
+        let method = 'POST';
+
+
+
+        // Update
+
+        if (siteId) {
+
+            url = '/api/sites/' + siteId;
+
+            method = 'PUT';
+
+        }
+
+
+
+        fetch(url, {
+
+            method: method,
+
+            headers: {
+
+                'Content-Type':
+                    'application/json'
+
+            },
+
+            body:
+                JSON.stringify(site)
+
+        })
+
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Could not save site'
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+
+            .then(() => {
+
+
+                alert(
+
+                    siteId
+
+                        ? 'Site updated successfully!'
+
+                        : 'Site added successfully!'
+
+                );
+
+
+                closeModal();
+
+
+                loadSites();
+
+            })
+
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert(
+                    'Failed to save site.'
+                );
+
+            });
+
+    }
+
+
+
+    // ==========================================
+    // DELETE SITE
+    // ==========================================
+
+    function deleteSite(id) {
+
+
+        const confirmed =
+            confirm(
+                'Are you sure you want to delete this site?'
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+
+        fetch(
+            '/api/sites/' + id,
+            {
+                method: 'DELETE'
+            }
+        )
+
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Could not delete site'
+                    );
+
+                }
+
+            })
+
+
+            .then(() => {
+
+
+                alert(
+                    'Site deleted successfully!'
+                );
+
+
+                loadSites();
+
+            })
+
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert(
+                    'Could not delete site. It may be linked to other records.'
+                );
+
+            });
+
+    }
+
+
+
+    // ==========================================
+    // CLOSE MODAL
+    // ==========================================
+
+    function closeModal() {
+
+        document.getElementById('siteModal')
+            .style.display = 'none';
+
+    }
+
+
+
+    // Close modal when clicking outside
+
+    window.onclick = function(event) {
+
+
+        const modal =
+            document.getElementById('siteModal');
+
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
+
+</script>
+
+
+</body>
+
+</html>

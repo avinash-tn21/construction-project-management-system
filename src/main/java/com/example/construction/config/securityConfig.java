@@ -14,7 +14,14 @@ public class securityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**", "/dashboard", "/style.css").permitAll()
+                                .requestMatchers(
+                                        "/api/**",
+                                        "/dashboard",
+                                        "/projects",
+                                        "/sites",
+                                        "/style.css"
+                                ).permitAll()
+
                         .anyRequest().authenticated()
                 );
 
