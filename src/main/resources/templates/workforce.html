@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Management</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        .page-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+        }
+
+        .btn-primary {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .summary-card h3 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .table-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            background: #f4f6f8;
+            padding: 13px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #e5e7eb;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            width: 500px;
+            max-width: 90%;
+            max-height: 85vh;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            font-size: 25px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-cancel {
+            background: #e5e7eb;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .page-content {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h2>Construction MS</h2>
+            <p>Management System</p>
+        </div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects" class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="/sites" class="nav-item">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <div class="nav-group">
+
+                <a href="/workforce" class="nav-item active">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance" class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
+
+            <a href="/inventory" class="nav-item">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment" class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs" class="nav-item">
+                <span>☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="page-content">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Workforce Management</h1>
+                <p>Manage construction workers and workforce information.</p>
+            </div>
+
+            <button class="btn-primary" onclick="openAddModal()">
+                + Add Worker
+            </button>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <h3>Total Workers</h3>
+                <div class="number" id="totalWorkers">0</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Active Workers</h3>
+                <div class="number" id="activeWorkers">0</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Inactive Workers</h3>
+                <div class="number" id="inactiveWorkers">0</div>
+            </div>
+
+        </div>
+
+
+        <!-- WORKER TABLE -->
+        <div class="table-card">
+
+            <div class="table-header">
+                <h2>Workers</h2>
+            </div>
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Job Role</th>
+                    <th>Skill Level</th>
+                    <th>Phone</th>
+                    <th>Hire Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody id="workerTableBody">
+                </tbody>
+
+            </table>
+
+            <div id="emptyMessage" class="empty-message">
+                No workers found. Click "Add Worker" to add a worker.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ADD / EDIT MODAL -->
+<div id="workerModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">Add Worker</h2>
+
+            <span class="close" onclick="closeModal()">&times;</span>
+
+        </div>
+
+
+        <form id="workerForm">
+
+            <input type="hidden" id="workerId">
+
+            <div class="form-group">
+                <label>Worker Name</label>
+                <input type="text" id="workerName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="phone">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email">
+            </div>
+
+            <div class="form-group">
+                <label>Job Role</label>
+                <input type="text" id="jobRole" placeholder="e.g. Mason, Electrician" required>
+            </div>
+
+            <div class="form-group">
+                <label>Skill Level</label>
+
+                <select id="skillLevel">
+
+                    <option value="">Select Skill Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label>Hire Date</label>
+                <input type="date" id="hireDate">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select id="status" required>
+
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button type="button" class="btn-cancel" onclick="closeModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Save Worker
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let workers = [];
+
+    // LOAD WORKERS
+    async function loadWorkers() {
+
+        try {
+
+            const response = await fetch("/api/workers");
+
+            workers = await response.json();
+
+            displayWorkers();
+
+        } catch (error) {
+
+            console.error("Error loading workers:", error);
+
+        }
+
+    }
+
+
+    // DISPLAY WORKERS
+    function displayWorkers() {
+
+        const tableBody = document.getElementById("workerTableBody");
+        const emptyMessage = document.getElementById("emptyMessage");
+
+        tableBody.innerHTML = "";
+
+
+        document.getElementById("totalWorkers").textContent = workers.length;
+
+        const active = workers.filter(
+            worker => worker.status === "ACTIVE"
+        ).length;
+
+        const inactive = workers.filter(
+            worker => worker.status !== "ACTIVE"
+        ).length;
+
+        document.getElementById("activeWorkers").textContent = active;
+        document.getElementById("inactiveWorkers").textContent = inactive;
+
+
+        if (workers.length === 0) {
+
+            emptyMessage.style.display = "block";
+            return;
+
+        }
+
+        emptyMessage.style.display = "none";
+
+
+        workers.forEach(worker => {
+
+            const row = document.createElement("tr");
+
+            const statusClass =
+                worker.status === "ACTIVE"
+                    ? "status-active"
+                    : "status-inactive";
+
+
+            row.innerHTML = `
+
+                <td>${worker.workerId}</td>
+
+                <td>${worker.workerName}</td>
+
+                <td>${worker.jobRole}</td>
+
+                <td>${worker.skillLevel || "-"}</td>
+
+                <td>${worker.phone || "-"}</td>
+
+                <td>${worker.hireDate || "-"}</td>
+
+                <td>
+                    <span class="status ${statusClass}">
+                        ${worker.status}
+                    </span>
+                </td>
+
+                <td>
+
+                    <button class="action-btn edit-btn"
+                            onclick="editWorker(${worker.workerId})">
+                        Edit
+                    </button>
+
+                    <button class="action-btn delete-btn"
+                            onclick="deleteWorker(${worker.workerId})">
+                        Delete
+                    </button>
+
+                </td>
+
+            `;
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+
+    // OPEN ADD MODAL
+    function openAddModal() {
+
+        document.getElementById("modalTitle").textContent = "Add Worker";
+
+        document.getElementById("workerForm").reset();
+
+        document.getElementById("workerId").value = "";
+
+        document.getElementById("workerModal").style.display = "block";
+
+    }
+
+
+    // CLOSE MODAL
+    function closeModal() {
+
+        document.getElementById("workerModal").style.display = "none";
+
+    }
+
+
+    // EDIT WORKER
+    function editWorker(id) {
+
+        const worker = workers.find(
+            w => w.workerId === id
+        );
+
+        if (!worker) return;
+
+
+        document.getElementById("modalTitle").textContent = "Edit Worker";
+
+        document.getElementById("workerId").value = worker.workerId;
+
+        document.getElementById("workerName").value =
+            worker.workerName || "";
+
+        document.getElementById("phone").value =
+            worker.phone || "";
+
+        document.getElementById("email").value =
+            worker.email || "";
+
+        document.getElementById("jobRole").value =
+            worker.jobRole || "";
+
+        document.getElementById("skillLevel").value =
+            worker.skillLevel || "";
+
+        document.getElementById("hireDate").value =
+            worker.hireDate || "";
+
+        document.getElementById("status").value =
+            worker.status || "ACTIVE";
+
+
+        document.getElementById("workerModal").style.display = "block";
+
+    }
+
+
+    // SAVE WORKER
+    document.getElementById("workerForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const id = document.getElementById("workerId").value;
+
+
+            const worker = {
+
+                workerName:
+                document.getElementById("workerName").value,
+
+                phone:
+                document.getElementById("phone").value,
+
+                email:
+                document.getElementById("email").value,
+
+                jobRole:
+                document.getElementById("jobRole").value,
+
+                skillLevel:
+                document.getElementById("skillLevel").value,
+
+                hireDate:
+                    document.getElementById("hireDate").value || null,
+
+                status:
+                document.getElementById("status").value
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response = await fetch(
+                        `/api/workers/${id}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(worker)
+                        }
+                    );
+
+                } else {
+
+                    response = await fetch(
+                        "/api/workers",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(worker)
+                        }
+                    );
+
+                }
+
+
+                if (!response.ok) {
+
+                    alert("Failed to save worker.");
+
+                    return;
+
+                }
+
+
+                closeModal();
+
+                await loadWorkers();
+
+
+            } catch (error) {
+
+                console.error("Error saving worker:", error);
+
+                alert("An error occurred while saving the worker.");
+
+            }
+
+        });
+
+
+    // DELETE WORKER
+    async function deleteWorker(id) {
+
+        const confirmed = confirm(
+            "Are you sure you want to delete this worker?"
+        );
+
+        if (!confirmed) return;
+
+
+        try {
+
+            const response = await fetch(
+                `/api/workers/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                alert("Failed to delete worker.");
+
+                return;
+
+            }
+
+
+            await loadWorkers();
+
+
+        } catch (error) {
+
+            console.error("Error deleting worker:", error);
+
+            alert("An error occurred while deleting the worker.");
+
+        }
+
+    }
+
+
+    // CLOSE MODAL WHEN CLICKING OUTSIDE
+    window.onclick = function(event) {
+
+        const modal =
+            document.getElementById("workerModal");
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
+
+    // LOAD DATA WHEN PAGE OPENS
+    loadWorkers();
+
+</script>
+
+</body>
+</html>

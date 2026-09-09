@@ -15,7 +15,10 @@ body {
     min-height: 100vh;
 }
 
-/* SIDEBAR */
+
+/* =========================
+   SIDEBAR
+   ========================= */
 
 .sidebar {
     width: 250px;
@@ -95,6 +98,54 @@ nav {
     font-weight: bold;
 }
 
+
+/* =========================
+   WORKFORCE SUBMENU
+   ========================= */
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 20px 9px 52px;
+    margin-bottom: 6px;
+    color: #aeb8c2;
+    text-decoration: none;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.nav-sub-item span {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.nav-sub-item:hover {
+    color: white;
+    background: #25313c;
+}
+
+.nav-sub-item.active {
+    color: #f59e0b;
+    background: #25313c;
+    font-weight: bold;
+}
+
+
+/* =========================
+   SIDEBAR BOTTOM
+   ========================= */
+
 .sidebar-bottom {
     margin-top: auto;
     padding: 20px;
@@ -116,7 +167,9 @@ nav {
 }
 
 
-/* MAIN */
+/* =========================
+   MAIN
+   ========================= */
 
 .main-content {
     margin-left: 250px;
@@ -125,7 +178,9 @@ nav {
 }
 
 
-/* HEADER */
+/* =========================
+   HEADER
+   ========================= */
 
 .topbar {
     display: flex;
@@ -168,7 +223,9 @@ nav {
 }
 
 
-/* STATISTICS */
+/* =========================
+   STATISTICS
+   ========================= */
 
 .stats-grid {
     display: grid;
@@ -220,7 +277,9 @@ nav {
 }
 
 
-/* PANELS */
+/* =========================
+   PANELS
+   ========================= */
 
 .content-grid {
     display: grid;
@@ -268,7 +327,9 @@ nav {
 }
 
 
-/* PROJECT PROGRESS */
+/* =========================
+   PROJECT PROGRESS
+   ========================= */
 
 .project-row {
     margin-bottom: 23px;
@@ -315,7 +376,9 @@ nav {
 }
 
 
-/* QUICK ACTIONS */
+/* =========================
+   QUICK ACTIONS
+   ========================= */
 
 .actions {
     display: flex;
@@ -362,7 +425,9 @@ nav {
 }
 
 
-/* ACTIVITIES */
+/* =========================
+   ACTIVITIES
+   ========================= */
 
 .activity {
     display: flex;
@@ -419,7 +484,9 @@ nav {
 }
 
 
-/* RESPONSIVE */
+/* =========================
+   RESPONSIVE
+   ========================= */
 
 @media (max-width: 1000px) {
 
@@ -431,6 +498,7 @@ nav {
         grid-template-columns: 1fr;
     }
 }
+
 
 @media (max-width: 700px) {
 
@@ -455,5 +523,14 @@ nav {
 
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .nav-sub-item {
+        padding-left: 25px;
+        font-size: 0;
+    }
+
+    .nav-sub-item span {
+        font-size: 14px;
     }
 }

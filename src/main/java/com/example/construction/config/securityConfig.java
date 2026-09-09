@@ -18,6 +18,8 @@ public class securityConfig {
                                         "/api/**",
                                         "/dashboard",
                                         "/projects",
+                                        "/workforce",
+                                        "/attendance",
                                         "/sites",
                                         "/style.css"
                                 ).permitAll()

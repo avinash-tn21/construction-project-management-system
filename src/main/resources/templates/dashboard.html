@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construction Management System</title>
-
     <link rel="stylesheet" href="/style.css">
 </head>
 
@@ -12,20 +12,18 @@
 
 <div class="dashboard">
 
-    <!-- ================= SIDEBAR ================= -->
+    ```
+    <!-- SIDEBAR -->
     <aside class="sidebar">
 
         <div class="logo">
             <div class="logo-icon">C</div>
-
             <div>
                 <h2>CONSTRUCT</h2>
                 <span>MANAGEMENT</span>
             </div>
         </div>
 
-
-        <!-- Navigation -->
         <nav>
 
             <a href="/dashboard" class="nav-item active">
@@ -43,10 +41,19 @@
                 Sites
             </a>
 
-            <a href="/workforce" class="nav-item">
-                <span>◉</span>
-                Workforce
-            </a>
+            <div class="nav-group">
+
+                <a href="/workforce" class="nav-item">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance" class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
 
             <a href="/inventory" class="nav-item">
                 <span>▣</span>
@@ -64,9 +71,6 @@
             </a>
 
         </nav>
-
-
-        <!-- System Status -->
         <div class="sidebar-bottom">
 
             <div class="system-status">
@@ -79,42 +83,24 @@
     </aside>
 
 
-    <!-- ================= MAIN CONTENT ================= -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
-
-        <!-- Header -->
+        <!-- TOP BAR -->
         <header class="topbar">
 
             <div>
-
-                <p class="welcome">
-                    Welcome back
-                </p>
-
-                <h1>
-                    Dashboard
-                </h1>
-
+                <p class="welcome">Welcome back</p>
+                <h1>Dashboard</h1>
             </div>
-
 
             <div class="profile">
 
-                <div class="avatar">
-                    S
-                </div>
+                <div class="avatar">S</div>
 
                 <div>
-
-                    <strong>
-                        Site Supervisor
-                    </strong>
-
-                    <small>
-                        Administrator
-                    </small>
-
+                    <strong>Site Supervisor</strong>
+                    <small>Administrator</small>
                 </div>
 
             </div>
@@ -122,110 +108,56 @@
         </header>
 
 
-
-        <!-- ================= STATISTICS ================= -->
+        <!-- STATISTICS -->
         <section class="stats-grid">
 
-
-            <!-- Active Projects -->
             <div class="stat-card">
 
-                <div class="stat-icon">
-                    ▤
-                </div>
+                <div class="stat-icon">▤</div>
 
                 <div>
-
-                    <p>
-                        Active Projects
-                    </p>
-
-                    <h2>
-                        3
-                    </h2>
-
-                    <span class="positive">
-                        ↑ 12% this month
-                    </span>
-
+                    <p>Active Projects</p>
+                    <h2>3</h2>
+                    <span class="positive">↑ 12% this month</span>
                 </div>
 
             </div>
 
 
-            <!-- Active Sites -->
             <div class="stat-card">
 
-                <div class="stat-icon">
-                    ⌂
-                </div>
+                <div class="stat-icon">⌂</div>
 
                 <div>
-
-                    <p>
-                        Active Sites
-                    </p>
-
-                    <h2>
-                        2
-                    </h2>
-
-                    <span class="positive">
-                        All operational
-                    </span>
-
+                    <p>Active Sites</p>
+                    <h2>2</h2>
+                    <span class="positive">All operational</span>
                 </div>
 
             </div>
 
 
-            <!-- Total Workers -->
             <div class="stat-card">
 
-                <div class="stat-icon">
-                    ◉
-                </div>
+                <div class="stat-icon">◉</div>
 
                 <div>
-
-                    <p>
-                        Total Workers
-                    </p>
-
-                    <h2>
-                        42
-                    </h2>
-
-                    <span class="positive">
-                        36 present today
-                    </span>
-
+                    <p>Total Workers</p>
+                    <h2>42</h2>
+                    <span class="positive">36 present today</span>
                 </div>
 
             </div>
 
 
-            <!-- Equipment -->
             <div class="stat-card">
 
-                <div class="stat-icon">
-                    ⚙
-                </div>
+                <div class="stat-icon">⚙</div>
 
                 <div>
-
-                    <p>
-                        Equipment
-                    </p>
-
-                    <h2>
-                        18
-                    </h2>
-
-                    <span class="warning">
-                        4 allocated
-                    </span>
-
+                    <p>Equipment</p>
+                    <h2>18</h2>
+                    <span class="warning">4 allocated</span>
                 </div>
 
             </div>
@@ -233,29 +165,19 @@
         </section>
 
 
-
-        <!-- ================= MAIN GRID ================= -->
+        <!-- CONTENT GRID -->
         <section class="content-grid">
 
 
             <!-- PROJECT PROGRESS -->
             <div class="panel progress-panel">
 
-
                 <div class="panel-header">
 
                     <div>
-
-                        <p class="section-label">
-                            PROJECT OVERVIEW
-                        </p>
-
-                        <h2>
-                            Current Project Progress
-                        </h2>
-
+                        <p class="section-label">PROJECT OVERVIEW</p>
+                        <h2>Current Project Progress</h2>
                     </div>
-
 
                     <button class="view-button">
                         View All
@@ -264,22 +186,18 @@
                 </div>
 
 
-
                 <div class="project-progress">
 
 
-                    <!-- Project 1 -->
                     <div class="project-row">
 
                         <div class="project-info">
 
-                            <strong>
-                                Colombo Office Complex
-                            </strong>
+                            <strong>Colombo Office Complex</strong>
 
                             <span>
-                                Foundation & structural work
-                            </span>
+                            Foundation & structural work
+                        </span>
 
                         </div>
 
@@ -295,28 +213,22 @@
 
                             </div>
 
-                            <strong>
-                                72%
-                            </strong>
+                            <strong>72%</strong>
 
                         </div>
 
                     </div>
 
 
-
-                    <!-- Project 2 -->
                     <div class="project-row">
 
                         <div class="project-info">
 
-                            <strong>
-                                Residential Development
-                            </strong>
+                            <strong>Residential Development</strong>
 
                             <span>
-                                Construction phase
-                            </span>
+                            Construction phase
+                        </span>
 
                         </div>
 
@@ -332,28 +244,22 @@
 
                             </div>
 
-                            <strong>
-                                48%
-                            </strong>
+                            <strong>48%</strong>
 
                         </div>
 
                     </div>
 
 
-
-                    <!-- Project 3 -->
                     <div class="project-row">
 
                         <div class="project-info">
 
-                            <strong>
-                                Warehouse Project
-                            </strong>
+                            <strong>Warehouse Project</strong>
 
                             <span>
-                                Site preparation
-                            </span>
+                            Site preparation
+                        </span>
 
                         </div>
 
@@ -369,23 +275,20 @@
 
                             </div>
 
-                            <strong>
-                                25%
-                            </strong>
+                            <strong>25%</strong>
 
                         </div>
 
                     </div>
+
 
                 </div>
 
             </div>
 
 
-
             <!-- QUICK ACTIONS -->
             <div class="panel">
-
 
                 <div class="panel-header">
 
@@ -395,31 +298,22 @@
                             QUICK ACTIONS
                         </p>
 
-                        <h2>
-                            Manage Site
-                        </h2>
+                        <h2>Manage Site</h2>
 
                     </div>
 
                 </div>
 
 
-
                 <div class="actions">
 
-
-                    <!-- Daily Log -->
                     <button class="action-button">
 
-                        <span>
-                            ＋
-                        </span>
+                        <span>＋</span>
 
                         <div>
 
-                            <strong>
-                                New Daily Log
-                            </strong>
+                            <strong>New Daily Log</strong>
 
                             <small>
                                 Record today's activities
@@ -430,19 +324,13 @@
                     </button>
 
 
-
-                    <!-- Worker -->
                     <button class="action-button">
 
-                        <span>
-                            ＋
-                        </span>
+                        <span>＋</span>
 
                         <div>
 
-                            <strong>
-                                Add Worker
-                            </strong>
+                            <strong>Add Worker</strong>
 
                             <small>
                                 Register workforce
@@ -453,19 +341,13 @@
                     </button>
 
 
-
-                    <!-- Material -->
                     <button class="action-button">
 
-                        <span>
-                            ＋
-                        </span>
+                        <span>＋</span>
 
                         <div>
 
-                            <strong>
-                                Material Request
-                            </strong>
+                            <strong>Material Request</strong>
 
                             <small>
                                 Request site materials
@@ -482,10 +364,8 @@
         </section>
 
 
-
-        <!-- ================= RECENT ACTIVITIES ================= -->
+        <!-- RECENT ACTIVITIES -->
         <section class="panel activity-panel">
-
 
             <div class="panel-header">
 
@@ -495,12 +375,9 @@
                         SITE MANAGEMENT
                     </p>
 
-                    <h2>
-                        Recent Site Activities
-                    </h2>
+                    <h2>Recent Site Activities</h2>
 
                 </div>
-
 
                 <button class="view-button">
                     View Logs
@@ -509,11 +386,9 @@
             </div>
 
 
-
             <div class="activity-list">
 
 
-                <!-- Activity 1 -->
                 <div class="activity">
 
                     <div class="activity-icon">
@@ -533,14 +408,12 @@
                     </div>
 
                     <span class="activity-status completed">
-                        Completed
-                    </span>
+                    Completed
+                </span>
 
                 </div>
 
 
-
-                <!-- Activity 2 -->
                 <div class="activity">
 
                     <div class="activity-icon">
@@ -560,14 +433,12 @@
                     </div>
 
                     <span class="activity-status progress">
-                        In Progress
-                    </span>
+                    In Progress
+                </span>
 
                 </div>
 
 
-
-                <!-- Activity 3 -->
                 <div class="activity">
 
                     <div class="activity-icon">
@@ -587,18 +458,21 @@
                     </div>
 
                     <span class="activity-status completed">
-                        Recorded
-                    </span>
+                    Recorded
+                </span>
 
                 </div>
+
 
             </div>
 
         </section>
 
     </main>
+    ```
 
 </div>
 
 </body>
 </html>
+side
