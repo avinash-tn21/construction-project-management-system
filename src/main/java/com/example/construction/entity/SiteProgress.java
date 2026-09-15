@@ -29,6 +29,9 @@ public class SiteProgress {
 
     private String issues;
 
+    @Column(name = "daily_log_id")
+    private Integer dailyLogId;
+
     public SiteProgress() {
     }
 
@@ -86,5 +89,13 @@ public class SiteProgress {
 
     public void setIssues(String issues) {
         this.issues = issues;
+    }
+
+    public Integer getDailyLogId() {
+        return dailyLogId;
+    }
+
+    public void setDailyLogId(Integer dailyLogId) {
+        this.dailyLogId = dailyLogId;
     }
 }

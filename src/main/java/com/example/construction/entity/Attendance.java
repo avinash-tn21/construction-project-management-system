@@ -3,6 +3,7 @@ package com.example.construction.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Duration;
 
 @Entity
 @Table(name = "attendance")
@@ -77,5 +78,24 @@ public class Attendance {
 
     public void setCheckOut(LocalTime checkOut) {
         this.checkOut = checkOut;
+    }
+    @Transient
+    public String getHoursWorked() {
+
+        if (checkIn == null || checkOut == null) {
+            return "-";
+        }
+
+        long minutes =
+                Duration.between(checkIn, checkOut).toMinutes();
+
+        long hours = minutes / 60;
+        long remainingMinutes = minutes % 60;
+
+        return String.format(
+                "%02dh %02dm",
+                hours,
+                remainingMinutes
+        );
     }
 }

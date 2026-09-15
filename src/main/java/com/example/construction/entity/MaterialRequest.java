@@ -12,14 +12,17 @@ public class MaterialRequest {
     @Column(name = "request_id")
     private Integer requestId;
 
-    @Column(name = "project_id", nullable = false)
-    private Integer projectId;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
-    @Column(name = "inventory_id", nullable = false)
-    private Integer inventoryId;
+    @ManyToOne
+    @JoinColumn(name = "inventory_id", nullable = false)
+    private InventoryItem inventoryItem;
 
-    @Column(name = "requested_by", nullable = false)
-    private Integer requestedBy;
+    @ManyToOne
+    @JoinColumn(name = "requested_by", nullable = false)
+    private User requestedBy;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -43,27 +46,27 @@ public class MaterialRequest {
         this.requestId = requestId;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Integer getInventoryId() {
-        return inventoryId;
+    public InventoryItem getInventoryItem() {
+        return inventoryItem;
     }
 
-    public void setInventoryId(Integer inventoryId) {
-        this.inventoryId = inventoryId;
+    public void setInventoryItem(InventoryItem inventoryItem) {
+        this.inventoryItem = inventoryItem;
     }
 
-    public Integer getRequestedBy() {
+    public User getRequestedBy() {
         return requestedBy;
     }
 
-    public void setRequestedBy(Integer requestedBy) {
+    public void setRequestedBy(User requestedBy) {
         this.requestedBy = requestedBy;
     }
 

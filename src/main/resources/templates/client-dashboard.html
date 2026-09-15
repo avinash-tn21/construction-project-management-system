@@ -1,0 +1,1512 @@
+````
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Client Dashboard | Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f4f6;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2937;
+        }
+
+        .client-layout {
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .client-header {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            color: white;
+            padding: 22px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            background: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .client-header h1 {
+            margin: 0;
+            font-size: 23px;
+            letter-spacing: 0.2px;
+        }
+
+        .client-header p {
+            margin: 5px 0 0;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .logout-button {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+            padding: 10px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .client-content {
+            width: 100%;
+            max-width: 1450px;
+            margin: auto;
+            padding: 32px 40px 50px;
+        }
+
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff, #fffaf0);
+            border: 1px solid #f1f1f1;
+            border-radius: 16px;
+            padding: 28px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .welcome-card::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.08);
+            right: -60px;
+            top: -70px;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-label {
+            color: #f59e0b;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .welcome-card h2 {
+            margin: 0;
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .welcome-card p {
+            margin: 8px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .client-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 15px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 7px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error-card {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           PROJECT SELECTOR
+        ========================= */
+
+        .project-selector {
+            margin-bottom: 25px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            color: #111827;
+            font-size: 20px;
+        }
+
+        .section-heading span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .project-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 15px;
+        }
+
+        .project-card {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: #1f2937;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 13px;
+            padding: 20px;
+            min-height: 145px;
+            transition: 0.2s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            border-color: #f59e0b;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .project-card.active {
+            border: 2px solid #f59e0b;
+            background: linear-gradient(135deg, #fffdf8, #fff8e8);
+        }
+
+        .selected-label {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #f59e0b;
+            color: white;
+            font-size: 10px;
+            padding: 4px 7px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .project-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #fff7df;
+            color: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 13px;
+        }
+
+        .project-card h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+
+        .project-location {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           PROJECT HERO
+        ========================= */
+
+        .project-details {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .project-hero {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            color: white;
+            padding: 28px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-hero::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 35px solid rgba(245,158,11,0.08);
+            right: 40px;
+            top: -130px;
+        }
+
+        .project-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-label {
+            color: #fbbf24;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .project-hero h2 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        .project-description {
+            color: #cbd5e1;
+            margin: 9px 0 0;
+            max-width: 750px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .project-status-large {
+            display: inline-flex;
+            margin-top: 17px;
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: rgba(245,158,11,0.16);
+            border: 1px solid rgba(245,158,11,0.3);
+            color: #fbbf24;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           PROJECT INFO
+        ========================= */
+
+        .project-body {
+            padding: 25px 30px 30px;
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #eef0f2;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .info-icon {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .info-box span {
+            display: block;
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .info-box strong {
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           PROGRESS
+        ========================= */
+
+        .progress-section {
+            margin-top: 28px;
+            background: #fafafa;
+            border: 1px solid #eeeeee;
+            border-radius: 13px;
+            padding: 23px;
+        }
+
+        .progress-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 17px;
+        }
+
+        .progress-heading-left {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .progress-mini-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: #fff7df;
+            color: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-heading strong {
+            font-size: 15px;
+        }
+
+        .progress-percentage {
+            font-size: 27px;
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .progress-bar {
+            height: 16px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 9px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           LOWER GRID
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .section-card h2 {
+            margin: 0;
+            color: #111827;
+            font-size: 19px;
+        }
+
+        .section-subtitle {
+            margin: 6px 0 22px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           TIMELINE
+        ========================= */
+
+        .timeline {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: #e5e7eb;
+        }
+
+        .update-item {
+            position: relative;
+            margin-bottom: 22px;
+            padding-bottom: 3px;
+        }
+
+        .update-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -25px;
+            top: 3px;
+            width: 14px;
+            height: 14px;
+            background: #f59e0b;
+            border: 3px solid #fff7df;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #f59e0b;
+        }
+
+        .update-card {
+            background: #fafafa;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+            padding: 15px 17px;
+        }
+
+        .update-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+        .update-date {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .update-progress {
+            background: #fff7df;
+            color: #b45309;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .update-activity {
+            font-weight: bold;
+            color: #1f2937;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .update-description {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .issue {
+            margin-top: 11px;
+            padding: 9px 11px;
+            background: #fff1f2;
+            color: #be123c;
+            border-left: 3px solid #f43f5e;
+            border-radius: 5px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+
+        /* =========================
+           PROJECT SNAPSHOT
+        ========================= */
+
+        .snapshot-card {
+            margin-bottom: 25px;
+        }
+
+        .snapshot-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .snapshot-item:last-child {
+            border-bottom: none;
+        }
+
+        .snapshot-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .snapshot-icon {
+            width: 32px;
+            height: 32px;
+            background: #f8fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .snapshot-value {
+            font-weight: bold;
+            font-size: 13px;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           STATUS CARD
+        ========================= */
+
+        .status-card {
+            background: linear-gradient(135deg, #fffaf0, #ffffff);
+            border: 1px solid #f5e5bd;
+        }
+
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-top: 18px;
+            padding: 14px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #eeeeee;
+        }
+
+        .status-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .status-text strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .status-text span {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .no-updates {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 13px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .no-updates h3 {
+            margin: 0 0 6px;
+            color: #4b5563;
+        }
+
+        .no-updates p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .client-header {
+                padding: 18px 20px;
+            }
+
+            .header-brand {
+                gap: 10px;
+            }
+
+            .brand-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .client-header h1 {
+                font-size: 18px;
+            }
+
+            .client-header p {
+                display: none;
+            }
+
+            .logout-button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .client-content {
+                padding: 20px;
+            }
+
+            .welcome-card {
+                padding: 22px;
+            }
+
+            .welcome-card h2 {
+                font-size: 23px;
+            }
+
+            .project-hero {
+                padding: 23px;
+            }
+
+            .project-hero h2 {
+                font-size: 22px;
+            }
+
+            .project-body {
+                padding: 20px;
+            }
+
+            .project-info {
+                grid-template-columns: 1fr;
+            }
+
+            .project-list {
+                grid-template-columns: 1fr;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+
+            .progress-heading {
+                align-items: flex-start;
+            }
+
+            .progress-percentage {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="client-layout">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="client-header">
+
+        <div class="header-brand">
+
+            <div class="brand-icon">
+                C
+            </div>
+
+            <div>
+
+                <h1>Client Portal</h1>
+
+                <p>
+                    Construction Project Management System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form method="post" action="/logout">
+
+            <button
+                    class="logout-button"
+                    type="submit">
+
+                Logout
+
+            </button>
+
+        </form>
+
+    </header>
+
+
+
+    <main class="client-content">
+
+
+        <!-- =========================
+             WELCOME
+        ========================== -->
+
+        <div
+                th:if="${client != null}"
+                class="welcome-card">
+
+            <div class="welcome-content">
+
+                <div class="welcome-label">
+                    Client Portal
+                </div>
+
+                <h2>
+
+                    Welcome,
+                    <span th:text="${client.clientName}">
+                        Client
+                    </span>
+
+                </h2>
+
+                <p>
+                    Here's the latest overview of your construction projects.
+                </p>
+
+                <div class="client-email">
+
+                    ✉
+
+                    <strong th:text="${client.email}">
+                        email
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             ERROR
+        ========================== -->
+
+        <div
+                th:if="${clientNotFound}"
+                class="error-card">
+
+            <strong>
+                Client profile not found.
+            </strong>
+
+            <p>
+                Your login account has not yet been linked to a client profile.
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================
+             MY PROJECTS
+        ========================== -->
+
+        <div
+                th:if="${client != null}"
+                class="project-selector">
+
+            <div class="section-heading">
+
+                <h2>
+                    My Projects
+                </h2>
+
+                <span th:if="${!projects.empty}">
+                    Select a project to view details
+                </span>
+
+            </div>
+
+
+            <div
+                    th:if="${projects.empty}"
+                    class="section-card no-updates">
+
+                <div class="empty-icon">
+                    🏗
+                </div>
+
+                <h3>
+                    No projects found
+                </h3>
+
+                <p>
+                    There are currently no projects linked to your account.
+                </p>
+
+            </div>
+
+
+            <div
+                    th:if="${!projects.empty}"
+                    class="project-list">
+
+
+                <a
+                        th:each="project : ${projects}"
+                        th:href="@{/client/dashboard(projectId=${project.projectId})}"
+                        class="project-card"
+                        th:classappend="${selectedProject != null && selectedProject.projectId == project.projectId ? 'active' : ''}">
+
+
+                    <div
+                            th:if="${selectedProject != null && selectedProject.projectId == project.projectId}"
+                            class="selected-label">
+
+                        Selected
+
+                    </div>
+
+
+                    <div class="project-icon">
+                        🏗
+                    </div>
+
+
+                    <h3
+                            th:text="${project.projectName}">
+
+                        Project Name
+
+                    </h3>
+
+
+                    <div
+                            class="project-location">
+
+                        📍
+
+                        <span th:text="${project.location}">
+                            Location
+                        </span>
+
+                    </div>
+
+
+                    <span
+                            class="project-status"
+                            th:text="${project.status}">
+
+                        ONGOING
+
+                    </span>
+
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             SELECTED PROJECT
+        ========================== -->
+
+        <div
+                th:if="${selectedProject != null}"
+                class="project-details">
+
+
+            <!-- PROJECT HERO -->
+
+            <div class="project-hero">
+
+                <div class="project-hero-content">
+
+                    <div class="project-label">
+                        Current Project
+                    </div>
+
+                    <h2
+                            th:text="${selectedProject.projectName}">
+
+                        Project Name
+
+                    </h2>
+
+                    <p
+                            class="project-description"
+                            th:text="${selectedProject.description}">
+
+                        Project description
+
+                    </p>
+
+                    <div
+                            class="project-status-large">
+
+                        ●
+
+                        <span th:text="${selectedProject.status}">
+                            Ongoing
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="project-body">
+
+
+                <!-- PROJECT INFORMATION -->
+
+                <div class="project-info">
+
+
+                    <div class="info-box">
+
+                        <div class="info-icon">
+                            📍
+                        </div>
+
+                        <span>
+                            Location
+                        </span>
+
+                        <strong
+                                th:text="${selectedProject.location}">
+                            Location
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-icon">
+                            📅
+                        </div>
+
+                        <span>
+                            Start Date
+                        </span>
+
+                        <strong
+                                th:text="${selectedProject.startDate}">
+                            Date
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-icon">
+                            🏁
+                        </div>
+
+                        <span>
+                            Expected Completion
+                        </span>
+
+                        <strong
+                                th:text="${selectedProject.endDate}">
+                            Date
+                        </strong>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-icon">
+                            📊
+                        </div>
+
+                        <span>
+                            Current Status
+                        </span>
+
+                        <strong
+                                th:text="${selectedProject.status}">
+                            Ongoing
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- OVERALL PROGRESS -->
+
+                <div class="progress-section">
+
+
+                    <div class="progress-heading">
+
+                        <div class="progress-heading-left">
+
+                            <div class="progress-mini-icon">
+                                ↗
+                            </div>
+
+                            <strong>
+                                Overall Project Completion
+                            </strong>
+
+                        </div>
+
+
+                        <span
+                                class="progress-percentage"
+                                th:text="${overallProgress + '%'}">
+
+                            0%
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div
+                                class="progress-fill"
+                                th:style="'width:' + ${overallProgress} + '%'">
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-footer">
+
+                        <span>
+                            Project started
+                        </span>
+
+                        <span>
+                            Completion progress
+                        </span>
+
+                        <span>
+                            Target completion
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             LOWER DASHBOARD
+        ========================== -->
+
+        <div
+                th:if="${selectedProject != null}"
+                class="dashboard-grid">
+
+
+            <!-- =========================
+                 RECENT PROGRESS
+            ========================== -->
+
+            <div class="section-card">
+
+                <h2>
+                    Recent Site Activity
+                </h2>
+
+                <p class="section-subtitle">
+                    Latest progress updates recorded for your project
+                </p>
+
+
+                <div
+                        th:if="${noProgress}"
+                        class="no-updates">
+
+                    <div class="empty-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        No updates yet
+                    </h3>
+
+                    <p>
+                        No progress information has been recorded for this project yet.
+                    </p>
+
+                </div>
+
+
+                <div
+                        th:if="${!noProgress}"
+                        class="timeline">
+
+
+                    <div
+                            th:each="update : ${recentUpdates}"
+                            class="update-item">
+
+
+                        <div class="timeline-dot"></div>
+
+
+                        <div class="update-card">
+
+
+                            <div class="update-top">
+
+                                <span
+                                        class="update-date"
+                                        th:text="${update.progressDate}">
+
+                                    Date
+
+                                </span>
+
+
+                                <span
+                                        class="update-progress"
+                                        th:text="${update.progressPercentage + '% complete'}">
+
+                                    50% complete
+
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                    class="update-activity"
+                                    th:text="${update.activity}">
+
+                                Activity
+
+                            </div>
+
+
+                            <div
+                                    th:if="${update.issues != null && !update.issues.isEmpty()}"
+                                    class="issue">
+
+                                <strong>
+                                    ⚠ Issue / Delay:
+                                </strong>
+
+                                <span th:text="${update.issues}">
+                                    None
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 RIGHT COLUMN
+            ========================== -->
+
+            <div>
+
+
+                <!-- PROJECT SNAPSHOT -->
+
+                <div class="section-card snapshot-card">
+
+                    <h2>
+                        Project Snapshot
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Key information at a glance
+                    </p>
+
+
+                    <div class="snapshot-item">
+
+                        <div class="snapshot-label">
+
+                            <div class="snapshot-icon">
+                                📍
+                            </div>
+
+                            Location
+
+                        </div>
+
+                        <div
+                                class="snapshot-value"
+                                th:text="${selectedProject.location}">
+
+                            Location
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="snapshot-item">
+
+                        <div class="snapshot-label">
+
+                            <div class="snapshot-icon">
+                                ▶
+                            </div>
+
+                            Started
+
+                        </div>
+
+                        <div
+                                class="snapshot-value"
+                                th:text="${selectedProject.startDate}">
+
+                            Date
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="snapshot-item">
+
+                        <div class="snapshot-label">
+
+                            <div class="snapshot-icon">
+                                🏁
+                            </div>
+
+                            Target
+
+                        </div>
+
+                        <div
+                                class="snapshot-value"
+                                th:text="${selectedProject.endDate}">
+
+                            Date
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="snapshot-item">
+
+                        <div class="snapshot-label">
+
+                            <div class="snapshot-icon">
+                                📈
+                            </div>
+
+                            Progress
+
+                        </div>
+
+                        <div
+                                class="snapshot-value"
+                                th:text="${overallProgress + '%'}">
+
+                            0%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="section-card status-card">
+
+                    <h2>
+                        Project Status
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Current project condition
+                    </p>
+
+
+                    <div class="status-banner">
+
+                        <div class="status-circle">
+                            ✓
+                        </div>
+
+                        <div class="status-text">
+
+                            <strong
+                                    th:text="${selectedProject.status}">
+                                Ongoing
+                            </strong>
+
+                            <span>
+                                Current project status
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

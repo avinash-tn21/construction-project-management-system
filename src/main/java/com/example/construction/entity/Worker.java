@@ -32,6 +32,9 @@ public class Worker {
     @Column(nullable = false)
     private String status;
 
+    @Column(name = "site_id")
+    private Integer siteId;
+
     public Worker() {
     }
 
@@ -97,5 +100,13 @@ public class Worker {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
     }
 }

@@ -1,17 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Workforce Management</title>
 
     <link rel="stylesheet" href="/style.css">
 
     <style>
+
         .page-content {
             margin-left: 250px;
             padding: 30px;
             width: calc(100% - 250px);
+            box-sizing: border-box;
         }
 
         .page-header {
@@ -74,6 +79,7 @@
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
         }
 
         .table-header {
@@ -189,6 +195,7 @@
         .form-group input,
         .form-group select {
             width: 100%;
+            box-sizing: border-box;
             padding: 10px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
@@ -217,6 +224,7 @@
         }
 
         @media (max-width: 900px) {
+
             .sidebar {
                 width: 200px;
             }
@@ -229,215 +237,513 @@
             .summary-grid {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="dashboard">
 
-    <!-- SIDEBAR -->
+
+    <!-- ================= SIDEBAR ================= -->
+
     <aside class="sidebar">
 
-        <div class="sidebar-header">
-            <h2>Construction MS</h2>
-            <p>Management System</p>
-        </div>
 
-        <nav>
+        <div class="logo">
 
-            <a href="/dashboard" class="nav-item">
-                <span>▦</span>
-                Dashboard
-            </a>
+            <div class="logo-icon">
+                C
+            </div>
 
-            <a href="/projects" class="nav-item">
-                <span>▤</span>
-                Projects
-            </a>
+            <div>
 
-            <a href="/sites" class="nav-item">
-                <span>⌂</span>
-                Sites
-            </a>
+                <h2>
+                    CONSTRUCT
+                </h2>
 
-            <div class="nav-group">
-
-                <a href="/workforce" class="nav-item active">
-                    <span>◉</span>
-                    Workforce
-                </a>
-
-                <a href="/attendance" class="nav-sub-item">
-                    <span>✓</span>
-                    Attendance
-                </a>
+                <span>
+                    MANAGEMENT
+                </span>
 
             </div>
 
-            <a href="/inventory" class="nav-item">
-                <span>▣</span>
-                Inventory
+        </div>
+
+
+        <nav>
+
+
+            <a href="/dashboard" class="nav-item">
+
+                <span>▦</span>
+
+                Dashboard
+
             </a>
+
+
+            <a href="/projects" class="nav-item">
+
+                <span>▤</span>
+
+                Projects
+
+            </a>
+
+
+            <a href="/clients" class="nav-item">
+
+                <span>👤</span>
+
+                Clients
+
+            </a>
+
+
+            <a href="/contractors" class="nav-item">
+
+                <span>🏗</span>
+
+                Contractors
+
+            </a>
+
+
+            <a href="/sites" class="nav-item">
+
+                <span>⌂</span>
+
+                Sites
+
+            </a>
+
+
+            <div class="nav-group">
+
+
+                <a href="/workforce" class="nav-item active">
+
+                    <span>◉</span>
+
+                    Workforce
+
+                </a>
+
+
+                <a href="/attendance" class="nav-sub-item">
+
+                    <span>✓</span>
+
+                    Attendance
+
+                </a>
+
+
+            </div>
+
+
+            <a href="/inventory" class="nav-item">
+
+                <span>▣</span>
+
+                Inventory
+
+            </a>
+
 
             <a href="/equipment" class="nav-item">
+
                 <span>⚙</span>
+
                 Equipment
+
             </a>
+
 
             <a href="/daily-logs" class="nav-item">
+
                 <span>☷</span>
+
                 Daily Logs
+
             </a>
 
+
         </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </div>
+
 
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+
+    <!-- ================= MAIN CONTENT ================= -->
+
     <main class="page-content">
+
 
         <div class="page-header">
 
+
             <div>
-                <h1>Workforce Management</h1>
-                <p>Manage construction workers and workforce information.</p>
+
+                <h1>
+                    Workforce Management
+                </h1>
+
+                <p>
+                    Manage construction workers and workforce information.
+                </p>
+
             </div>
 
-            <button class="btn-primary" onclick="openAddModal()">
+
+            <button
+                    class="btn-primary"
+                    onclick="openAddModal()">
+
                 + Add Worker
+
             </button>
 
+
         </div>
 
 
-        <!-- SUMMARY -->
+
+        <!-- ================= SUMMARY ================= -->
+
         <div class="summary-grid">
 
-            <div class="summary-card">
-                <h3>Total Workers</h3>
-                <div class="number" id="totalWorkers">0</div>
-            </div>
 
             <div class="summary-card">
-                <h3>Active Workers</h3>
-                <div class="number" id="activeWorkers">0</div>
+
+                <h3>
+                    Total Workers
+                </h3>
+
+                <div
+                        class="number"
+                        id="totalWorkers">
+
+                    0
+
+                </div>
+
             </div>
 
+
             <div class="summary-card">
-                <h3>Inactive Workers</h3>
-                <div class="number" id="inactiveWorkers">0</div>
+
+                <h3>
+                    Active Workers
+                </h3>
+
+                <div
+                        class="number"
+                        id="activeWorkers">
+
+                    0
+
+                </div>
+
             </div>
+
+
+            <div class="summary-card">
+
+                <h3>
+                    Inactive Workers
+                </h3>
+
+                <div
+                        class="number"
+                        id="inactiveWorkers">
+
+                    0
+
+                </div>
+
+            </div>
+
 
         </div>
 
 
-        <!-- WORKER TABLE -->
+
+        <!-- ================= WORKER TABLE ================= -->
+
         <div class="table-card">
 
+
             <div class="table-header">
-                <h2>Workers</h2>
+
+                <h2>
+                    Workers
+                </h2>
+
             </div>
+
 
             <table>
 
+
                 <thead>
+
                 <tr>
+
                     <th>ID</th>
+
                     <th>Name</th>
+
                     <th>Job Role</th>
+
                     <th>Skill Level</th>
+
                     <th>Phone</th>
+
                     <th>Hire Date</th>
+
                     <th>Status</th>
+
                     <th>Actions</th>
+
                 </tr>
+
                 </thead>
 
+
                 <tbody id="workerTableBody">
+
                 </tbody>
+
 
             </table>
 
-            <div id="emptyMessage" class="empty-message">
+
+            <div
+                    id="emptyMessage"
+                    class="empty-message">
+
                 No workers found. Click "Add Worker" to add a worker.
+
             </div>
+
 
         </div>
 
+
     </main>
+
 
 </div>
 
 
-<!-- ADD / EDIT MODAL -->
-<div id="workerModal" class="modal">
+
+<!-- ================= ADD / EDIT MODAL ================= -->
+
+<div
+        id="workerModal"
+        class="modal">
+
 
     <div class="modal-content">
 
+
         <div class="modal-header">
 
-            <h2 id="modalTitle">Add Worker</h2>
 
-            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">
+                Add Worker
+            </h2>
+
+
+            <span
+                    class="close"
+                    onclick="closeModal()">
+
+                &times;
+
+            </span>
+
 
         </div>
 
 
+
         <form id="workerForm">
 
-            <input type="hidden" id="workerId">
+
+            <input
+                    type="hidden"
+                    id="workerId">
+
 
             <div class="form-group">
-                <label>Worker Name</label>
-                <input type="text" id="workerName" required>
+
+                <label>
+                    Worker Name
+                </label>
+
+                <input
+                        type="text"
+                        id="workerName"
+                        required>
+
             </div>
 
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="text" id="phone">
-            </div>
 
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                        type="text"
+                        id="phone">
+
             </div>
 
-            <div class="form-group">
-                <label>Job Role</label>
-                <input type="text" id="jobRole" placeholder="e.g. Mason, Electrician" required>
-            </div>
 
             <div class="form-group">
-                <label>Skill Level</label>
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                        type="email"
+                        id="email">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Job Role
+                </label>
+
+                <input
+                        type="text"
+                        id="jobRole"
+                        placeholder="e.g. Mason, Electrician"
+                        required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Skill Level
+                </label>
+
 
                 <select id="skillLevel">
 
-                    <option value="">Select Skill Level</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                    <option value="Expert">Expert</option>
+
+                    <option value="">
+                        Select Skill Level
+                    </option>
+
+
+                    <option value="Beginner">
+                        Beginner
+                    </option>
+
+
+                    <option value="Intermediate">
+                        Intermediate
+                    </option>
+
+
+                    <option value="Advanced">
+                        Advanced
+                    </option>
+
+
+                    <option value="Expert">
+                        Expert
+                    </option>
+
 
                 </select>
 
+
             </div>
 
+
             <div class="form-group">
-                <label>Hire Date</label>
-                <input type="date" id="hireDate">
+
+                <label>
+                    Hire Date
+                </label>
+
+                <input
+                        type="date"
+                        id="hireDate">
+
             </div>
 
+
             <div class="form-group">
-                <label>Status</label>
 
-                <select id="status" required>
+                <label>
+                    Status
+                </label>
 
-                    <option value="ACTIVE">Active</option>
-                    <option value="INACTIVE">Inactive</option>
 
+                <select
+                        id="status"
+                        required>
+
+
+                    <option value="ACTIVE">
+                        Active
+                    </option>
+
+
+                    <option value="INACTIVE">
+                        Inactive
+                    </option>
+
+
+                </select>
+
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Assigned Site
+                </label>
+
+                <select id="siteId">
+                    <option value="">No Site Assigned</option>
                 </select>
 
             </div>
@@ -445,83 +751,224 @@
 
             <div class="form-actions">
 
-                <button type="button" class="btn-cancel" onclick="closeModal()">
+
+                <button
+                        type="button"
+                        class="btn-cancel"
+                        onclick="closeModal()">
+
                     Cancel
+
                 </button>
 
-                <button type="submit" class="btn-primary">
+
+                <button
+                        type="submit"
+                        class="btn-primary">
+
                     Save Worker
+
                 </button>
+
 
             </div>
 
+
         </form>
 
+
     </div>
+
 
 </div>
 
 
+
 <script>
 
-    let workers = [];
 
-    // LOAD WORKERS
-    async function loadWorkers() {
+    let workers = [];
+    let sites = [];
+
+
+
+    // ==========================================
+    // LOAD SITES
+    // ==========================================
+
+    async function loadSites() {
 
         try {
 
-            const response = await fetch("/api/workers");
+            const response = await fetch("/api/sites");
 
-            workers = await response.json();
+            if (!response.ok) {
+                throw new Error("Failed to load sites");
+            }
 
-            displayWorkers();
+            sites = await response.json();
+            populateSiteDropdown();
 
         } catch (error) {
 
-            console.error("Error loading workers:", error);
+            console.error("Error loading sites:", error);
+
+        }
+    }
+
+
+    function populateSiteDropdown() {
+
+        const select = document.getElementById("siteId");
+
+        if (!select) return;
+
+        select.innerHTML = '<option value="">No Site Assigned</option>';
+
+        sites
+            .filter(site => String(site.status || '').toUpperCase() !== 'INACTIVE')
+            .forEach(site => {
+
+                const option = document.createElement("option");
+                option.value = site.siteId;
+                option.textContent = site.siteName +
+                    (site.location ? " - " + site.location : "");
+                select.appendChild(option);
+            });
+    }
+
+
+    function getSiteName(siteId) {
+
+        if (!siteId) return "-";
+
+        const site = sites.find(
+            s => Number(s.siteId) === Number(siteId)
+        );
+
+        return site ? site.siteName : "-";
+    }
+
+
+    // ==========================================
+    // LOAD WORKERS
+    // ==========================================
+
+    async function loadWorkers() {
+
+
+        try {
+
+
+            const response =
+                await fetch("/api/workers");
+
+
+            workers =
+                await response.json();
+
+
+            displayWorkers();
+
+
+        } catch (error) {
+
+
+            console.error(
+                "Error loading workers:",
+                error
+            );
+
 
         }
 
     }
 
 
+
+    // ==========================================
     // DISPLAY WORKERS
+    // ==========================================
+
     function displayWorkers() {
 
-        const tableBody = document.getElementById("workerTableBody");
-        const emptyMessage = document.getElementById("emptyMessage");
+
+        const tableBody =
+            document.getElementById(
+                "workerTableBody"
+            );
+
+
+        const emptyMessage =
+            document.getElementById(
+                "emptyMessage"
+            );
+
 
         tableBody.innerHTML = "";
 
 
-        document.getElementById("totalWorkers").textContent = workers.length;
 
-        const active = workers.filter(
-            worker => worker.status === "ACTIVE"
-        ).length;
+        document.getElementById(
+            "totalWorkers"
+        ).textContent =
+            workers.length;
 
-        const inactive = workers.filter(
-            worker => worker.status !== "ACTIVE"
-        ).length;
 
-        document.getElementById("activeWorkers").textContent = active;
-        document.getElementById("inactiveWorkers").textContent = inactive;
+
+        const active =
+            workers.filter(
+                worker =>
+                    worker.status === "ACTIVE"
+            ).length;
+
+
+
+        const inactive =
+            workers.filter(
+                worker =>
+                    worker.status !== "ACTIVE"
+            ).length;
+
+
+
+        document.getElementById(
+            "activeWorkers"
+        ).textContent =
+            active;
+
+
+
+        document.getElementById(
+            "inactiveWorkers"
+        ).textContent =
+            inactive;
+
 
 
         if (workers.length === 0) {
 
-            emptyMessage.style.display = "block";
+
+            emptyMessage.style.display =
+                "block";
+
+
             return;
 
         }
 
-        emptyMessage.style.display = "none";
+
+        emptyMessage.style.display =
+            "none";
+
 
 
         workers.forEach(worker => {
 
-            const row = document.createElement("tr");
+
+            const row =
+                document.createElement("tr");
+
 
             const statusClass =
                 worker.status === "ACTIVE"
@@ -529,269 +976,498 @@
                     : "status-inactive";
 
 
+
             row.innerHTML = `
 
-                <td>${worker.workerId}</td>
-
-                <td>${worker.workerName}</td>
-
-                <td>${worker.jobRole}</td>
-
-                <td>${worker.skillLevel || "-"}</td>
-
-                <td>${worker.phone || "-"}</td>
-
-                <td>${worker.hireDate || "-"}</td>
+                <td>
+                    ${worker.workerId}
+                </td>
 
                 <td>
-                    <span class="status ${statusClass}">
-                        ${worker.status}
-                    </span>
+                    ${worker.workerName}
+                </td>
+
+                <td>
+                    ${worker.jobRole}
+                </td>
+
+                <td>
+                    ${worker.skillLevel || "-"}
+                </td>
+
+                <td>
+                    ${worker.phone || "-"}
+                </td>
+
+                <td>
+                    ${worker.hireDate || "-"}
                 </td>
 
                 <td>
 
-                    <button class="action-btn edit-btn"
+                    <span class="status ${statusClass}">
+
+                        ${worker.status}
+
+                    </span>
+
+                </td>
+
+                <td>
+                    ${getSiteName(worker.siteId)}
+                </td>
+
+                <td>
+
+                    <button
+                            class="action-btn edit-btn"
                             onclick="editWorker(${worker.workerId})">
+
                         Edit
+
                     </button>
 
-                    <button class="action-btn delete-btn"
+
+                    <button
+                            class="action-btn delete-btn"
                             onclick="deleteWorker(${worker.workerId})">
+
                         Delete
+
                     </button>
 
                 </td>
 
             `;
 
+
             tableBody.appendChild(row);
+
 
         });
 
     }
 
 
+
+    // ==========================================
     // OPEN ADD MODAL
+    // ==========================================
+
     function openAddModal() {
 
-        document.getElementById("modalTitle").textContent = "Add Worker";
 
-        document.getElementById("workerForm").reset();
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Add Worker";
 
-        document.getElementById("workerId").value = "";
 
-        document.getElementById("workerModal").style.display = "block";
+        document.getElementById(
+            "workerForm"
+        ).reset();
+
+
+        document.getElementById(
+            "workerId"
+        ).value =
+            "";
+
+        document.getElementById("siteId").value = "";
+
+        document.getElementById(
+            "workerModal"
+        ).style.display =
+            "block";
+
 
     }
 
 
+
+    // ==========================================
     // CLOSE MODAL
+    // ==========================================
+
     function closeModal() {
 
-        document.getElementById("workerModal").style.display = "none";
+
+        document.getElementById(
+            "workerModal"
+        ).style.display =
+            "none";
+
 
     }
 
 
+
+    // ==========================================
     // EDIT WORKER
+    // ==========================================
+
     function editWorker(id) {
 
-        const worker = workers.find(
-            w => w.workerId === id
-        );
+
+        const worker =
+            workers.find(
+                w =>
+                    w.workerId === id
+            );
+
 
         if (!worker) return;
 
 
-        document.getElementById("modalTitle").textContent = "Edit Worker";
 
-        document.getElementById("workerId").value = worker.workerId;
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Edit Worker";
 
-        document.getElementById("workerName").value =
+
+        document.getElementById(
+            "workerId"
+        ).value =
+            worker.workerId;
+
+
+        document.getElementById(
+            "workerName"
+        ).value =
             worker.workerName || "";
 
-        document.getElementById("phone").value =
+
+        document.getElementById(
+            "phone"
+        ).value =
             worker.phone || "";
 
-        document.getElementById("email").value =
+
+        document.getElementById(
+            "email"
+        ).value =
             worker.email || "";
 
-        document.getElementById("jobRole").value =
+
+        document.getElementById(
+            "jobRole"
+        ).value =
             worker.jobRole || "";
 
-        document.getElementById("skillLevel").value =
+
+        document.getElementById(
+            "skillLevel"
+        ).value =
             worker.skillLevel || "";
 
-        document.getElementById("hireDate").value =
+
+        document.getElementById(
+            "hireDate"
+        ).value =
             worker.hireDate || "";
 
-        document.getElementById("status").value =
+
+        document.getElementById(
+            "status"
+        ).value =
             worker.status || "ACTIVE";
 
+        document.getElementById("siteId").value =
+            worker.siteId || "";
 
-        document.getElementById("workerModal").style.display = "block";
+
+        document.getElementById(
+            "workerModal"
+        ).style.display =
+            "block";
+
 
     }
 
 
+
+    // ==========================================
     // SAVE WORKER
-    document.getElementById("workerForm")
-        .addEventListener("submit", async function(event) {
+    // ==========================================
+
+    document.getElementById(
+        "workerForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
 
             event.preventDefault();
 
 
-            const id = document.getElementById("workerId").value;
+
+            const id =
+                document.getElementById(
+                    "workerId"
+                ).value;
+
 
 
             const worker = {
 
+
                 workerName:
-                document.getElementById("workerName").value,
+                document.getElementById(
+                    "workerName"
+                ).value,
+
 
                 phone:
-                document.getElementById("phone").value,
+                document.getElementById(
+                    "phone"
+                ).value,
+
 
                 email:
-                document.getElementById("email").value,
+                document.getElementById(
+                    "email"
+                ).value,
+
 
                 jobRole:
-                document.getElementById("jobRole").value,
+                document.getElementById(
+                    "jobRole"
+                ).value,
+
 
                 skillLevel:
-                document.getElementById("skillLevel").value,
+                document.getElementById(
+                    "skillLevel"
+                ).value,
+
 
                 hireDate:
-                    document.getElementById("hireDate").value || null,
+                    document.getElementById(
+                        "hireDate"
+                    ).value || null,
+
 
                 status:
-                document.getElementById("status").value
+                document.getElementById(
+                    "status"
+                ).value
+
 
             };
 
 
+
             try {
+
 
                 let response;
 
 
+
                 if (id) {
 
-                    response = await fetch(
-                        `/api/workers/${id}`,
-                        {
-                            method: "PUT",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(worker)
-                        }
-                    );
+
+                    response =
+                        await fetch(
+                            `/api/workers/${id}`,
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        worker
+                                    )
+
+                            }
+                        );
+
 
                 } else {
 
-                    response = await fetch(
-                        "/api/workers",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(worker)
-                        }
-                    );
+
+                    response =
+                        await fetch(
+                            "/api/workers",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        worker
+                                    )
+
+                            }
+                        );
+
 
                 }
 
 
+
                 if (!response.ok) {
 
-                    alert("Failed to save worker.");
+
+                    alert(
+                        "Failed to save worker."
+                    );
+
 
                     return;
 
                 }
 
 
+
                 closeModal();
+
 
                 await loadWorkers();
 
 
+
             } catch (error) {
 
-                console.error("Error saving worker:", error);
 
-                alert("An error occurred while saving the worker.");
+                console.error(
+                    "Error saving worker:",
+                    error
+                );
+
+
+                alert(
+                    "An error occurred while saving the worker."
+                );
+
 
             }
 
-        });
+        }
+    );
 
 
+
+    // ==========================================
     // DELETE WORKER
+    // ==========================================
+
     async function deleteWorker(id) {
 
-        const confirmed = confirm(
-            "Are you sure you want to delete this worker?"
-        );
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this worker?"
+            );
+
 
         if (!confirmed) return;
 
 
+
         try {
 
-            const response = await fetch(
-                `/api/workers/${id}`,
-                {
-                    method: "DELETE"
-                }
-            );
+
+            const response =
+                await fetch(
+                    `/api/workers/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
 
 
             if (!response.ok) {
 
-                alert("Failed to delete worker.");
+
+                alert(
+                    "Failed to delete worker."
+                );
+
 
                 return;
 
             }
 
 
+
             await loadWorkers();
+
 
 
         } catch (error) {
 
-            console.error("Error deleting worker:", error);
 
-            alert("An error occurred while deleting the worker.");
+            console.error(
+                "Error deleting worker:",
+                error
+            );
+
+
+            alert(
+                "An error occurred while deleting the worker."
+            );
+
 
         }
 
     }
 
 
+
+    // ==========================================
     // CLOSE MODAL WHEN CLICKING OUTSIDE
-    window.onclick = function(event) {
+    // ==========================================
 
-        const modal =
-            document.getElementById("workerModal");
-
-        if (event.target === modal) {
-
-            closeModal();
-
-        }
-
-    };
+    window.onclick =
+        function(event) {
 
 
+            const modal =
+                document.getElementById(
+                    "workerModal"
+                );
+
+
+            if (event.target === modal) {
+
+
+                closeModal();
+
+
+            }
+
+
+        };
+
+
+
+    // ==========================================
     // LOAD DATA WHEN PAGE OPENS
-    loadWorkers();
+    // ==========================================
+
+    async function loadPageData() {
+        await loadSites();
+        await loadWorkers();
+    }
+
+    loadPageData();
+
 
 </script>
+
 
 </body>
 </html>

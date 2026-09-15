@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,6 +84,7 @@
             border-radius: 10px;
             padding: 25px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow-x: auto;
         }
 
         .table-header {
@@ -226,6 +228,191 @@
             cursor: pointer;
         }
 
+
+        /* =====================================================
+           NOTIFICATION BELL
+           ===================================================== */
+
+        .notification-wrapper {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .notification-button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-button:hover {
+            background: #f8fafc;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 17px;
+            height: 17px;
+            padding: 0 4px;
+            border-radius: 20px;
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid #e5e7eb;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 17px;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .notification-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .notification-header span {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        .notification-list {
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .notification-item:hover {
+            background: #fafafa;
+        }
+
+        .notification-item.unread {
+            background: #fffbeb;
+        }
+
+        .notification-item.unread:hover {
+            background: #fef3c7;
+        }
+
+        .notification-item-top {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .notification-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #fef3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.45;
+        }
+
+        .notification-time {
+            font-size: 9px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+
+        .notification-read-button {
+            border: none;
+            background: none;
+            color: #d97706;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 6px;
+            padding: 0;
+        }
+
+        .notification-read-button:hover {
+            text-decoration: underline;
+        }
+
+        .notification-empty {
+            padding: 35px 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .notification-footer {
+            padding: 10px;
+            text-align: center;
+            border-top: 1px solid #edf0f2;
+            background: #fafafa;
+        }
+
+        .notification-footer button {
+            border: none;
+            background: none;
+            color: #d97706;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
         /* ===== Responsive ===== */
 
         @media (max-width: 900px) {
@@ -242,6 +429,19 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .notification-dropdown {
+                position: fixed;
+                top: 70px;
+                left: 10px;
+                right: 10px;
+                width: auto;
             }
 
         }
@@ -294,15 +494,34 @@
                 Projects
             </a>
 
+            <a href="/clients" class="nav-item">
+                <span>👤</span>
+                Clients
+            </a>
+
+            <a href="/contractors" class="nav-item">
+                <span>🏗</span>
+                Contractors
+            </a>
+
             <a href="/sites" class="nav-item active">
                 <span>⌂</span>
                 Sites
             </a>
 
-            <a href="/workforce" class="nav-item">
-                <span>◉</span>
-                Workforce
-            </a>
+            <div class="nav-group">
+
+                <a href="/workforce" class="nav-item">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance" class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
 
             <a href="/inventory" class="nav-item">
                 <span>▣</span>
@@ -358,21 +577,91 @@
             </div>
 
 
-            <div class="profile">
+            <!-- ================= NOTIFICATIONS + PROFILE ================= -->
 
-                <div class="avatar">
-                    S
+            <div style="display:flex; align-items:center;">
+
+                <div class="notification-wrapper">
+
+                    <button
+                            type="button"
+                            class="notification-button"
+                            id="notificationButton"
+                            onclick="toggleNotifications(event)"
+                            title="Notifications">
+
+                        🔔
+
+                        <span
+                                class="notification-badge"
+                                id="notificationBadge">
+                        </span>
+
+                    </button>
+
+
+                    <div
+                            class="notification-dropdown"
+                            id="notificationDropdown">
+
+                        <div class="notification-header">
+
+                            <h3>
+                                Notifications
+                            </h3>
+
+                            <span id="notificationCount">
+                                0 unread
+                            </span>
+
+                        </div>
+
+
+                        <div
+                                class="notification-list"
+                                id="notificationList">
+
+                            <div class="notification-empty">
+                                Loading notifications...
+                            </div>
+
+                        </div>
+
+
+                        <div class="notification-footer">
+
+                            <button
+                                    type="button"
+                                    onclick="markAllNotificationsRead()">
+
+                                Mark all as read
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div>
 
-                    <strong>
-                        Site Supervisor
-                    </strong>
+                <div class="profile">
 
-                    <small>
-                        Administrator
-                    </small>
+                    <div class="avatar">
+                        S
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Site Supervisor
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
 
                 </div>
 
@@ -567,188 +856,183 @@
         <div class="form-group">
 
             <label>
-                Project ID
+                Project
             </label>
 
-            <input
-                    type="number"
-                    id="projectId"
-                    placeholder="Enter project ID">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Site Name
-            </label>
-
-            <input
-                    type="text"
-                    id="siteName"
-                    placeholder="Enter site name">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Location
-            </label>
-
-            <input
-                    type="text"
-                    id="location"
-                    placeholder="Enter location">
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Status
-            </label>
-
-            <select id="status">
-
-                <option value="ACTIVE">
-                    Active
-                </option>
-
-                <option value="INACTIVE">
-                    Inactive
-                </option>
-
-                <option value="COMPLETED">
-                    Completed
-                </option>
-
+            <select
+                    id="projectId">
+                <option value="">Select a project</option>
             </select>
 
-        </div>
+
+            <div class="form-group">
+
+                <label>
+                    Site Name
+                </label>
+
+                <input
+                        type="text"
+                        id="siteName"
+                        placeholder="Enter site name">
+
+            </div>
 
 
-        <div class="form-buttons">
+            <div class="form-group">
 
-            <button
-                    class="cancel-btn"
-                    onclick="closeModal()">
+                <label>
+                    Location
+                </label>
 
-                Cancel
+                <input
+                        type="text"
+                        id="location"
+                        placeholder="Enter location">
 
-            </button>
+            </div>
 
 
-            <button
-                    class="save-btn"
-                    onclick="saveSite()">
+            <div class="form-group">
 
-                Save
+                <label>
+                    Status
+                </label>
 
-            </button>
+                <select id="status">
+
+                    <option value="ACTIVE">
+                        Active
+                    </option>
+
+                    <option value="INACTIVE">
+                        Inactive
+                    </option>
+
+                    <option value="COMPLETED">
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                        class="cancel-btn"
+                        onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                        class="save-btn"
+                        onclick="saveSite()">
+
+                    Save
+
+                </button>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+
+        // ==========================================
+        // LOAD SITES
+        // ==========================================
+
+        loadSites();
+
+
+        function loadSites() {
+
+            fetch('/api/sites')
+
+                .then(response => {
+
+                    if (!response.ok) {
+
+                        throw new Error('Could not load sites');
+
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(sites => {
+
+
+                    const tableBody =
+                        document.getElementById('sitesTableBody');
+
+                    const emptyMessage =
+                        document.getElementById('emptyMessage');
+
+
+                    tableBody.innerHTML = '';
+
+
+                    // Update summary
+
+                    document.getElementById('totalSites')
+                        .textContent = sites.length;
+
+
+                    const activeCount =
+                        sites.filter(site =>
+                            site.status &&
+                            site.status.toUpperCase() === 'ACTIVE'
+                        ).length;
+
+
+                    document.getElementById('activeSites')
+                        .textContent = activeCount;
+
+
+                    document.getElementById('otherSites')
+                        .textContent = sites.length - activeCount;
 
 
 
-<!-- ================= JAVASCRIPT ================= -->
+                    // No sites
 
-<script>
+                    if (sites.length === 0) {
 
+                        emptyMessage.style.display = 'block';
 
-    // Load sites when page opens
+                        return;
 
-    loadSites();
-
-
-
-    // ==========================================
-    // LOAD SITES
-    // ==========================================
-
-    function loadSites() {
-
-        fetch('/api/sites')
-
-            .then(response => {
-
-                if (!response.ok) {
-
-                    throw new Error('Could not load sites');
-
-                }
-
-                return response.json();
-
-            })
-
-            .then(sites => {
+                    }
 
 
-                const tableBody =
-                    document.getElementById('sitesTableBody');
-
-                const emptyMessage =
-                    document.getElementById('emptyMessage');
-
-
-                tableBody.innerHTML = '';
-
-
-                // Update summary
-
-                document.getElementById('totalSites')
-                    .textContent = sites.length;
-
-
-                const activeCount =
-                    sites.filter(site =>
-                        site.status &&
-                        site.status.toUpperCase() === 'ACTIVE'
-                    ).length;
-
-
-                document.getElementById('activeSites')
-                    .textContent = activeCount;
-
-
-                document.getElementById('otherSites')
-                    .textContent = sites.length - activeCount;
+                    emptyMessage.style.display = 'none';
 
 
 
-                // No sites
+                    // Add rows
 
-                if (sites.length === 0) {
-
-                    emptyMessage.style.display = 'block';
-
-                    return;
-
-                }
+                    sites.forEach(site => {
 
 
-                emptyMessage.style.display = 'none';
+                        const row =
+                            document.createElement('tr');
 
 
-
-                // Add rows
-
-                sites.forEach(site => {
-
-
-                    const row =
-                        document.createElement('tr');
-
-
-                    row.innerHTML = `
+                        row.innerHTML = `
 
                         <td>
                             ${site.siteId}
@@ -802,346 +1086,932 @@
                     `;
 
 
-                    tableBody.appendChild(row);
+                        tableBody.appendChild(row);
+
+                    });
+
+                })
+
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    alert('Failed to load sites.');
 
                 });
-
-            })
-
-
-            .catch(error => {
-
-                console.error(error);
-
-                alert('Failed to load sites.');
-
-            });
-
-    }
-
-
-
-    // ==========================================
-    // OPEN ADD MODAL
-    // ==========================================
-
-    function openAddModal() {
-
-
-        document.getElementById('modalTitle')
-            .textContent = 'Add Site';
-
-
-        document.getElementById('siteId')
-            .value = '';
-
-
-        document.getElementById('projectId')
-            .value = '';
-
-
-        document.getElementById('siteName')
-            .value = '';
-
-
-        document.getElementById('location')
-            .value = '';
-
-
-        document.getElementById('status')
-            .value = 'ACTIVE';
-
-
-        document.getElementById('siteModal')
-            .style.display = 'block';
-
-    }
-
-
-
-    // ==========================================
-    // EDIT SITE
-    // ==========================================
-
-    function editSite(site) {
-
-
-        document.getElementById('modalTitle')
-            .textContent = 'Edit Site';
-
-
-        document.getElementById('siteId')
-            .value = site.siteId;
-
-
-        document.getElementById('projectId')
-            .value = site.projectId;
-
-
-        document.getElementById('siteName')
-            .value = site.siteName;
-
-
-        document.getElementById('location')
-            .value = site.location || '';
-
-
-        document.getElementById('status')
-            .value = site.status;
-
-
-        document.getElementById('siteModal')
-            .style.display = 'block';
-
-    }
-
-
-
-    // ==========================================
-    // SAVE SITE
-    // ==========================================
-
-    function saveSite() {
-
-
-        const siteId =
-            document.getElementById('siteId').value;
-
-
-        const projectId =
-            document.getElementById('projectId').value;
-
-
-        const siteName =
-            document.getElementById('siteName').value.trim();
-
-
-        const location =
-            document.getElementById('location').value.trim();
-
-
-        const status =
-            document.getElementById('status').value;
-
-
-
-        // Validation
-
-        if (!projectId || !siteName) {
-
-            alert(
-                'Please enter Project ID and Site Name.'
-            );
-
-            return;
 
         }
 
 
 
-        const site = {
+        // ==========================================
+        // OPEN ADD MODAL
+        // ==========================================
 
-            projectId: parseInt(projectId),
+        function openAddModal() {
 
-            siteName: siteName,
+            loadProjectDropdown();
 
-            location: location,
 
-            status: status
+            document.getElementById('modalTitle')
+                .textContent = 'Add Site';
+
+
+            document.getElementById('siteId')
+                .value = '';
+
+
+            document.getElementById('projectId')
+                .value = '';
+
+
+            document.getElementById('siteName')
+                .value = '';
+
+
+            document.getElementById('location')
+                .value = '';
+
+
+            document.getElementById('status')
+                .value = 'ACTIVE';
+
+
+            document.getElementById('siteModal')
+                .style.display = 'block';
+
+        }
+
+
+
+        // ==========================================
+        // EDIT SITE
+        // ==========================================
+
+        function editSite(site) {
+
+            loadProjectDropdown(site.projectId);
+
+
+            document.getElementById('modalTitle')
+                .textContent = 'Edit Site';
+
+
+            document.getElementById('siteId')
+                .value = site.siteId;
+
+
+            document.getElementById('projectId')
+                .value = site.projectId;
+
+
+            document.getElementById('siteName')
+                .value = site.siteName;
+
+
+            document.getElementById('location')
+                .value = site.location || '';
+
+
+            document.getElementById('status')
+                .value = site.status;
+
+
+            document.getElementById('siteModal')
+                .style.display = 'block';
+
+        }
+
+
+
+        // ==========================================
+        // LOAD PROJECTS FOR SITE DROPDOWN
+        // ==========================================
+
+        function loadProjectDropdown(selectedProjectId = null) {
+
+            const projectSelect =
+                document.getElementById('projectId');
+
+            projectSelect.innerHTML =
+                '<option value="">Loading projects...</option>';
+
+            fetch('/api/projects')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Could not load projects');
+                    }
+                    return response.json();
+                })
+                .then(projects => {
+
+                    projectSelect.innerHTML =
+                        '<option value="">Select a project</option>';
+
+                    projects.forEach(project => {
+                        const option = document.createElement('option');
+                        option.value = project.projectId;
+                        option.textContent = project.projectName;
+
+                        if (selectedProjectId != null &&
+                            Number(selectedProjectId) === Number(project.projectId)) {
+                            option.selected = true;
+                        }
+
+                        projectSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading projects:', error);
+                    projectSelect.innerHTML =
+                        '<option value="">Could not load projects</option>';
+                });
+        }
+
+        // ==========================================
+        // SAVE SITE
+        // ==========================================
+
+        function saveSite() {
+
+
+            const siteId =
+                document.getElementById('siteId').value;
+
+
+            const projectId =
+                document.getElementById('projectId').value;
+
+
+            const siteName =
+                document.getElementById('siteName').value.trim();
+
+
+            const location =
+                document.getElementById('location').value.trim();
+
+
+            const status =
+                document.getElementById('status').value;
+
+
+
+            // Validation
+
+            if (!projectId || !siteName) {
+
+                alert(
+                    'Please select a project and enter Site Name.'
+                );
+
+                return;
+
+            }
+
+
+
+            const site = {
+
+                projectId: parseInt(projectId),
+
+                siteName: siteName,
+
+                location: location,
+
+                status: status
+
+            };
+
+
+
+            let url = '/api/sites';
+
+            let method = 'POST';
+
+
+
+            // Update
+
+            if (siteId) {
+
+                url = '/api/sites/' + siteId;
+
+                method = 'PUT';
+
+            }
+
+
+
+            fetch(url, {
+
+                method: method,
+
+                headers: {
+
+                    'Content-Type':
+                        'application/json'
+
+                },
+
+                body:
+                    JSON.stringify(site)
+
+            })
+
+
+                .then(response => {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            'Could not save site'
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+
+                .then(() => {
+
+
+                    alert(
+
+                        siteId
+
+                            ? 'Site updated successfully!'
+
+                            : 'Site added successfully!'
+
+                    );
+
+
+                    closeModal();
+
+
+                    loadSites();
+
+                })
+
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    alert(
+                        'Failed to save site.'
+                    );
+
+                });
+
+        }
+
+
+
+        // ==========================================
+        // DELETE SITE
+        // ==========================================
+
+        function deleteSite(id) {
+
+
+            const confirmed =
+                confirm(
+                    'Are you sure you want to delete this site?'
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+
+            fetch(
+                '/api/sites/' + id,
+                {
+                    method: 'DELETE'
+                }
+            )
+
+
+                .then(response => {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            'Could not delete site'
+                        );
+
+                    }
+
+                })
+
+
+                .then(() => {
+
+
+                    alert(
+                        'Site deleted successfully!'
+                    );
+
+
+                    loadSites();
+
+                })
+
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    alert(
+                        'Could not delete site. It may be linked to other records.'
+                    );
+
+                });
+
+        }
+
+
+
+        // ==========================================
+        // CLOSE MODAL
+        // ==========================================
+
+        function closeModal() {
+
+            document.getElementById('siteModal')
+                .style.display = 'none';
+
+        }
+
+
+
+        // Close modal when clicking outside
+
+        window.onclick = function(event) {
+
+
+            const modal =
+                document.getElementById('siteModal');
+
+
+            if (event.target === modal) {
+
+                closeModal();
+
+            }
 
         };
 
 
 
-        let url = '/api/sites';
+        // =====================================================
+        // NOTIFICATION SYSTEM
+        // =====================================================
 
-        let method = 'POST';
+        let currentUserId = null;
 
-
-
-        // Update
-
-        if (siteId) {
-
-            url = '/api/sites/' + siteId;
-
-            method = 'PUT';
-
-        }
+        let notifications = [];
 
 
+        async function loadCurrentUser() {
 
-        fetch(url, {
+            try {
 
-            method: method,
-
-            headers: {
-
-                'Content-Type':
-                    'application/json'
-
-            },
-
-            body:
-                JSON.stringify(site)
-
-        })
-
-
-            .then(response => {
+                const response =
+                    await fetch("/api/users/current");
 
                 if (!response.ok) {
 
                     throw new Error(
-                        'Could not save site'
+                        "Could not identify current user"
                     );
 
                 }
 
-                return response.json();
+                const user =
+                    await response.json();
 
-            })
+                currentUserId =
+                    user.userId;
 
+                await loadNotifications();
 
-            .then(() => {
+            } catch (error) {
 
-
-                alert(
-
-                    siteId
-
-                        ? 'Site updated successfully!'
-
-                        : 'Site added successfully!'
-
+                console.error(
+                    "Error loading current user:",
+                    error
                 );
 
-
-                closeModal();
-
-
-                loadSites();
-
-            })
-
-
-            .catch(error => {
-
-                console.error(error);
-
-                alert(
-                    'Failed to save site.'
-                );
-
-            });
-
-    }
-
-
-
-    // ==========================================
-    // DELETE SITE
-    // ==========================================
-
-    function deleteSite(id) {
-
-
-        const confirmed =
-            confirm(
-                'Are you sure you want to delete this site?'
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-
-        fetch(
-            '/api/sites/' + id,
-            {
-                method: 'DELETE'
             }
-        )
+
+        }
 
 
-            .then(response => {
+
+        async function loadNotifications() {
+
+            if (!currentUserId) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/notifications/user/${currentUserId}`
+                    );
+
 
                 if (!response.ok) {
 
                     throw new Error(
-                        'Could not delete site'
+                        "Failed to load notifications"
                     );
 
                 }
 
-            })
+
+                notifications =
+                    await response.json();
 
 
-            .then(() => {
+                displayNotifications();
 
+            } catch (error) {
 
-                alert(
-                    'Site deleted successfully!'
+                console.error(
+                    "Error loading notifications:",
+                    error
                 );
 
 
-                loadSites();
-
-            })
-
-
-            .catch(error => {
-
-                console.error(error);
-
-                alert(
-                    'Could not delete site. It may be linked to other records.'
-                );
-
-            });
-
-    }
+                const list =
+                    document.getElementById(
+                        "notificationList"
+                    );
 
 
+                if (list) {
 
-    // ==========================================
-    // CLOSE MODAL
-    // ==========================================
+                    list.innerHTML = `
 
-    function closeModal() {
+                    <div class="notification-empty">
 
-        document.getElementById('siteModal')
-            .style.display = 'none';
+                        Could not load notifications.
 
-    }
+                    </div>
 
+                `;
 
+                }
 
-    // Close modal when clicking outside
-
-    window.onclick = function(event) {
-
-
-        const modal =
-            document.getElementById('siteModal');
-
-
-        if (event.target === modal) {
-
-            closeModal();
+            }
 
         }
 
-    };
 
 
-</script>
+        function displayNotifications() {
+
+            const list =
+                document.getElementById(
+                    "notificationList"
+                );
+
+
+            const badge =
+                document.getElementById(
+                    "notificationBadge"
+                );
+
+
+            const countText =
+                document.getElementById(
+                    "notificationCount"
+                );
+
+
+            if (!list || !badge || !countText) {
+
+                return;
+
+            }
+
+
+            list.innerHTML = "";
+
+
+            const unread =
+                notifications.filter(
+                    n => n.status === "UNREAD"
+                );
+
+
+
+            // Badge
+
+            if (unread.length > 0) {
+
+                badge.textContent =
+                    unread.length > 99
+                        ? "99+"
+                        : unread.length;
+
+                badge.style.display =
+                    "flex";
+
+            } else {
+
+                badge.style.display =
+                    "none";
+
+            }
+
+
+
+            countText.textContent =
+                unread.length + " unread";
+
+
+
+            // Empty
+
+            if (notifications.length === 0) {
+
+                list.innerHTML = `
+
+                <div class="notification-empty">
+
+                    🔔
+                    <br><br>
+
+                    No notifications yet.
+
+                </div>
+
+            `;
+
+                return;
+
+            }
+
+
+
+            // Display latest 8
+
+            notifications
+                .slice(0, 8)
+                .forEach(notification => {
+
+
+                    const item =
+                        document.createElement("div");
+
+
+                    item.className =
+                        "notification-item " +
+                        (
+                            notification.status === "UNREAD"
+                                ? "unread"
+                                : ""
+                        );
+
+
+                    item.innerHTML = `
+
+                    <div class="notification-item-top">
+
+                        <div class="notification-icon">
+
+                            ${getNotificationIcon(
+                        notification.type
+                    )}
+
+                        </div>
+
+
+                        <div class="notification-content">
+
+                            <div class="notification-title">
+
+                                ${escapeHtml(
+                        notification.title
+                    )}
+
+                            </div>
+
+
+                            <div class="notification-message">
+
+                                ${escapeHtml(
+                        notification.message
+                    )}
+
+                            </div>
+
+
+                            <div class="notification-time">
+
+                                ${formatNotificationTime(
+                        notification.createdAt
+                    )}
+
+                            </div>
+
+
+                            ${
+                        notification.status === "UNREAD"
+                            ? `
+
+                                    <button
+                                        type="button"
+                                        class="notification-read-button"
+                                        onclick="
+                                            markNotificationRead(
+                                                ${notification.notificationId},
+                                                event
+                                            )
+                                        ">
+
+                                        Mark as read
+
+                                    </button>
+
+                                  `
+                            : ""
+                    }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                    list.appendChild(item);
+
+                });
+
+        }
+
+
+
+        function getNotificationIcon(type) {
+
+            switch (type) {
+
+                case "EQUIPMENT_REQUEST":
+                    return "⚙";
+
+                case "EQUIPMENT_RESPONSE":
+                    return "🏗";
+
+                case "MATERIAL_REQUEST":
+                    return "📦";
+
+                case "LOW_STOCK":
+                    return "⚠";
+
+                case "SITE_ISSUE":
+                    return "🚧";
+
+                case "ATTENDANCE_ISSUE":
+                    return "✓";
+
+                case "PROGRESS_UPDATE":
+                    return "📈";
+
+                default:
+                    return "🔔";
+
+            }
+
+        }
+
+
+
+        async function markNotificationRead(
+            id,
+            event
+        ) {
+
+            if (event) {
+
+                event.stopPropagation();
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/notifications/${id}/read`,
+                        {
+                            method: "PUT"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to mark notification as read"
+                    );
+
+                }
+
+
+                await loadNotifications();
+
+            } catch (error) {
+
+                console.error(
+                    "Error marking notification as read:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        async function markAllNotificationsRead() {
+
+            const unread =
+                notifications.filter(
+                    n => n.status === "UNREAD"
+                );
+
+
+            for (const notification of unread) {
+
+                try {
+
+                    await fetch(
+                        `/api/notifications/${notification.notificationId}/read`,
+                        {
+                            method: "PUT"
+                        }
+                    );
+
+                } catch (error) {
+
+                    console.error(error);
+
+                }
+
+            }
+
+
+            await loadNotifications();
+
+        }
+
+
+
+        function toggleNotifications(event) {
+
+            event.stopPropagation();
+
+
+            const dropdown =
+                document.getElementById(
+                    "notificationDropdown"
+                );
+
+
+            if (!dropdown) {
+
+                return;
+
+            }
+
+
+            dropdown.classList.toggle("show");
+
+        }
+
+
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                const wrapper =
+                    document.querySelector(
+                        ".notification-wrapper"
+                    );
+
+
+                const dropdown =
+                    document.getElementById(
+                        "notificationDropdown"
+                    );
+
+
+                if (
+                    wrapper &&
+                    dropdown &&
+                    !wrapper.contains(event.target)
+                ) {
+
+                    dropdown.classList.remove("show");
+
+                }
+
+            }
+        );
+
+
+
+        function escapeHtml(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return "";
+
+            }
+
+
+            return String(value)
+
+                .replace(/&/g, "&amp;")
+
+                .replace(/</g, "&lt;")
+
+                .replace(/>/g, "&gt;")
+
+                .replace(/"/g, "&quot;")
+
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+
+        function formatNotificationTime(
+            dateValue
+        ) {
+
+            if (!dateValue) {
+
+                return "";
+
+            }
+
+
+            const date =
+                new Date(dateValue);
+
+
+            if (isNaN(date.getTime())) {
+
+                return dateValue;
+
+            }
+
+
+            return date.toLocaleString();
+
+        }
+
+
+
+        // ==========================================
+        // INITIALIZE NOTIFICATIONS
+        // ==========================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function() {
+
+                await loadCurrentUser();
+
+            }
+        );
+
+
+    </script>
 
 
 </body>
-
 </html>
+
+
