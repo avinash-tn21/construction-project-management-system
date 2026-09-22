@@ -19,8 +19,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getCurrentUserOnly(
+            Authentication authentication) {
+
+        return findCurrentUser(authentication)
+                .map(user -> ResponseEntity.ok(List.of(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/current")
@@ -30,8 +34,17 @@ public class UserController {
             return ResponseEntity.status(401).build();
         }
 
-        return userRepository.findByUsername(authentication.getName())
+        return findCurrentUser(authentication)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    private java.util.Optional<User> findCurrentUser(
+            Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return java.util.Optional.empty();
+        }
+
+        return userRepository.findByUsername(authentication.getName());
     }
 }

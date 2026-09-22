@@ -1,6 +1,7 @@
 package com.example.construction.controller;
 
 import com.example.construction.entity.Task;
+import com.example.construction.service.ClientAccessService;
 import com.example.construction.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,26 +13,52 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
+    private final ClientAccessService clientAccessService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService,
+                          ClientAccessService clientAccessService) {
         this.taskService = taskService;
+        this.clientAccessService = clientAccessService;
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    public ResponseEntity<List<Task>> getAllTasks(
+            org.springframework.security.core.Authentication authentication) {
+        if (isClient(authentication)) {
+            if (clientAccessService.getCurrentClient(authentication).isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(taskService.getAllTasks().stream()
+                    .filter(task -> clientAccessService.getOwnedProject(
+                            authentication, task.getProjectId()).isPresent())
+                    .toList());
+        }
+        return ResponseEntity.ok(taskService.getAllTasks());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Integer id) {
+    public ResponseEntity<Task> getTaskById(@PathVariable Integer id,
+            org.springframework.security.core.Authentication authentication) {
+        if (isClient(authentication)) {
+            return taskService.getTaskById(id)
+                    .filter(task -> clientAccessService.getOwnedProject(
+                            authentication, task.getProjectId()).isPresent())
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        }
         return taskService.getTaskById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/project/{projectId}")
-    public List<Task> getTasksByProject(@PathVariable Integer projectId) {
-        return taskService.getTasksByProject(projectId);
+    public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Integer projectId,
+            org.springframework.security.core.Authentication authentication) {
+        if (isClient(authentication)
+                && clientAccessService.getOwnedProject(authentication, projectId).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(taskService.getTasksByProject(projectId));
     }
 
     @PostMapping
@@ -116,5 +143,10 @@ public class TaskController {
 
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private boolean isClient(org.springframework.security.core.Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENT"));
     }
 }

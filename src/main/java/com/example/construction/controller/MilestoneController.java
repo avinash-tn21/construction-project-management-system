@@ -1,6 +1,7 @@
 package com.example.construction.controller;
 
 import com.example.construction.entity.Milestone;
+import com.example.construction.service.ClientAccessService;
 import com.example.construction.service.MilestoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,26 +13,54 @@ import java.util.List;
 public class MilestoneController {
 
     private final MilestoneService milestoneService;
+    private final ClientAccessService clientAccessService;
 
-    public MilestoneController(MilestoneService milestoneService) {
+    public MilestoneController(MilestoneService milestoneService,
+                               ClientAccessService clientAccessService) {
         this.milestoneService = milestoneService;
+        this.clientAccessService = clientAccessService;
     }
 
     @GetMapping
-    public List<Milestone> getAllMilestones() {
-        return milestoneService.getAllMilestones();
+    public ResponseEntity<List<Milestone>> getAllMilestones(
+            org.springframework.security.core.Authentication authentication) {
+        if (isClient(authentication)) {
+            if (clientAccessService.getCurrentClient(authentication).isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(milestoneService.getAllMilestones().stream()
+                    .filter(milestone -> clientAccessService.getOwnedProject(
+                            authentication, milestone.getProjectId()).isPresent())
+                    .toList());
+        }
+        return ResponseEntity.ok(milestoneService.getAllMilestones());
     }
 
     @GetMapping("/project/{projectId}")
-    public List<Milestone> getMilestonesByProject(
-            @PathVariable Integer projectId) {
+    public ResponseEntity<List<Milestone>> getMilestonesByProject(
+            @PathVariable Integer projectId,
+            org.springframework.security.core.Authentication authentication) {
 
-        return milestoneService.getMilestonesByProject(projectId);
+        if (isClient(authentication)
+                && clientAccessService.getOwnedProject(authentication, projectId).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(milestoneService.getMilestonesByProject(projectId));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Milestone> getMilestoneById(
-            @PathVariable Integer id) {
+            @PathVariable Integer id,
+            org.springframework.security.core.Authentication authentication) {
+
+        if (isClient(authentication)) {
+            return milestoneService.getMilestoneById(id)
+                    .filter(milestone -> clientAccessService.getOwnedProject(
+                            authentication, milestone.getProjectId()).isPresent())
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        }
 
         return milestoneService.getMilestoneById(id)
                 .map(ResponseEntity::ok)
@@ -129,5 +158,10 @@ public class MilestoneController {
         milestoneService.deleteMilestone(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    private boolean isClient(org.springframework.security.core.Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENT"));
     }
 }

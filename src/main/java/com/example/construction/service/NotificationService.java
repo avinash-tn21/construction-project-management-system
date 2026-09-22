@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -34,6 +35,10 @@ public class NotificationService {
                 );
     }
 
+    public Optional<Notification> getNotificationById(Integer notificationId) {
+        return notificationRepository.findById(notificationId);
+    }
+
     public Notification createNotification(
             Integer senderId,
             Integer recipientId,
@@ -56,14 +61,8 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public void markAsRead(Integer notificationId) {
-
-        notificationRepository.findById(notificationId)
-                .ifPresent(notification -> {
-
-                    notification.setStatus("READ");
-
-                    notificationRepository.save(notification);
-                });
+    public void markAsRead(Notification notification) {
+        notification.setStatus("READ");
+        notificationRepository.save(notification);
     }
 }

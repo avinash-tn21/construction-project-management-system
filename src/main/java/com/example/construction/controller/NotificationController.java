@@ -1,6 +1,8 @@
 package com.example.construction.controller;
 
 import com.example.construction.entity.Notification;
+import com.example.construction.entity.User;
+import com.example.construction.repository.UserRepository;
 import com.example.construction.service.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,35 +14,63 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     public NotificationController(
-            NotificationService notificationService) {
+            NotificationService notificationService,
+            UserRepository userRepository) {
 
         this.notificationService = notificationService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/user/{userId}")
-    public List<Notification> getNotifications(
-            @PathVariable Integer userId) {
+    public ResponseEntity<List<Notification>> getNotifications(
+            @PathVariable Integer userId,
+            org.springframework.security.core.Authentication authentication) {
 
-        return notificationService.getNotifications(userId);
+        if (!isCurrentUser(userId, authentication)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(notificationService.getNotifications(userId));
     }
 
     @GetMapping("/user/{userId}/unread")
-    public List<Notification> getUnreadNotifications(
-            @PathVariable Integer userId) {
+    public ResponseEntity<List<Notification>> getUnreadNotifications(
+            @PathVariable Integer userId,
+            org.springframework.security.core.Authentication authentication) {
 
-        return notificationService
-                .getUnreadNotifications(userId);
+        if (!isCurrentUser(userId, authentication)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(notificationService.getUnreadNotifications(userId));
     }
 
     @PutMapping("/{id}/read")
     public ResponseEntity<Void> markAsRead(
-            @PathVariable Integer id) {
+            @PathVariable Integer id,
+            org.springframework.security.core.Authentication authentication) {
 
-        notificationService.markAsRead(id);
+        return notificationService.getNotificationById(id)
+                .filter(notification -> isCurrentUser(
+                        notification.getRecipientId(), authentication))
+                .map(notification -> {
+                    notificationService.markAsRead(notification);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-        return ResponseEntity.ok().build();
+    private boolean isCurrentUser(Integer userId,
+                                  org.springframework.security.core.Authentication authentication) {
+        return authentication != null
+                && authentication.isAuthenticated()
+                && userRepository.findByUsername(authentication.getName())
+                .map(User::getUserId)
+                .filter(userId::equals)
+                .isPresent();
     }
 
 

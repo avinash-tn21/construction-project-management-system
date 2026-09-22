@@ -6,6 +6,7 @@ import com.example.construction.repository.SiteProgressRepository;
 import com.example.construction.repository.SiteRepository;
 import com.example.construction.repository.UserRepository;
 import com.example.construction.service.NotificationService;
+import com.example.construction.service.ClientAccessService;
 import com.example.construction.service.impl.DailySiteLogService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +22,22 @@ public class DailySiteLogController {
     private final SiteRepository siteRepository;
     private final UserRepository userRepository;
     private final NotificationService notificationService;
+    private final ClientAccessService clientAccessService;
 
     public DailySiteLogController(
             DailySiteLogService dailySiteLogService,
             SiteProgressRepository siteProgressRepository,
             SiteRepository siteRepository,
             UserRepository userRepository,
-            NotificationService notificationService) {
+            NotificationService notificationService,
+            ClientAccessService clientAccessService) {
 
         this.dailySiteLogService = dailySiteLogService;
         this.siteProgressRepository = siteProgressRepository;
         this.siteRepository = siteRepository;
         this.userRepository = userRepository;
         this.notificationService = notificationService;
+        this.clientAccessService = clientAccessService;
     }
 
     // =========================================================
@@ -41,8 +45,19 @@ public class DailySiteLogController {
     // =========================================================
 
     @GetMapping
-    public List<DailySiteLog> getAllLogs() {
-        return dailySiteLogService.getAllLogs();
+    public ResponseEntity<List<DailySiteLog>> getAllLogs(
+            org.springframework.security.core.Authentication authentication) {
+        if (isClient(authentication)) {
+            if (clientAccessService.getCurrentClient(authentication).isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(dailySiteLogService.getAllLogs().stream()
+                    .filter(log -> isOwnedSite(authentication, log.getSiteId()))
+                    .toList());
+        }
+
+        return ResponseEntity.ok(dailySiteLogService.getAllLogs());
     }
 
     // =========================================================
@@ -51,7 +66,15 @@ public class DailySiteLogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DailySiteLog> getLogById(
-            @PathVariable Integer id) {
+            @PathVariable Integer id,
+            org.springframework.security.core.Authentication authentication) {
+
+        if (isClient(authentication)) {
+            return dailySiteLogService.getLogById(id)
+                    .filter(log -> isOwnedSite(authentication, log.getSiteId()))
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        }
 
         return dailySiteLogService.getLogById(id)
                 .map(ResponseEntity::ok)
@@ -348,5 +371,19 @@ public class DailySiteLogController {
 
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private boolean isOwnedSite(
+            org.springframework.security.core.Authentication authentication,
+            Integer siteId) {
+        return siteRepository.findById(siteId)
+                .flatMap(site -> clientAccessService.getOwnedProject(
+                        authentication, site.getProjectId()))
+                .isPresent();
+    }
+
+    private boolean isClient(org.springframework.security.core.Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_CLIENT"));
     }
 }
