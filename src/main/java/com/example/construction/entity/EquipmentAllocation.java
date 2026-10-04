@@ -12,11 +12,17 @@ public class EquipmentAllocation {
     @Column(name = "allocation_id")
     private Integer allocationId;
 
-    @Column(name = "equipment_id", nullable = false)
-    private Integer equipmentId;
+    @ManyToOne
+    @JoinColumn(name = "equipment_id", nullable = false)
+    private Equipment equipment;
 
-    @Column(name = "project_id", nullable = false)
-    private Integer projectId;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "site_id", nullable = false)
+    private Site site;
 
     @Column(name = "allocated_date", nullable = false)
     private LocalDate allocatedDate;
@@ -40,20 +46,28 @@ public class EquipmentAllocation {
         this.allocationId = allocationId;
     }
 
-    public Integer getEquipmentId() {
-        return equipmentId;
+    public Equipment getEquipment() {
+        return equipment;
     }
 
-    public void setEquipmentId(Integer equipmentId) {
-        this.equipmentId = equipmentId;
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public LocalDate getAllocatedDate() {

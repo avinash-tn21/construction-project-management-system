@@ -17,11 +17,20 @@ public class Task {
 
     private String description;
 
+    @Column(name = "phase")
+    private String phase;
+
     @Column(name = "start_date")
     private LocalDate startDate;
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @Column(name = "estimated_duration")
+    private Integer estimatedDuration;
+
+    @Column(name = "depends_on_task_id")
+    private Integer dependsOnTaskId;
 
     @Column(nullable = false)
     private String status;
@@ -56,6 +65,14 @@ public class Task {
         this.description = description;
     }
 
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -70,6 +87,22 @@ public class Task {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Integer getEstimatedDuration() {
+        return estimatedDuration;
+    }
+
+    public void setEstimatedDuration(Integer estimatedDuration) {
+        this.estimatedDuration = estimatedDuration;
+    }
+
+    public Integer getDependsOnTaskId() {
+        return dependsOnTaskId;
+    }
+
+    public void setDependsOnTaskId(Integer dependsOnTaskId) {
+        this.dependsOnTaskId = dependsOnTaskId;
     }
 
     public String getStatus() {

@@ -30,8 +30,20 @@ public class DailySiteLog {
     @Column(nullable = false)
     private String activities;
 
+    @Column(name = "crew_present")
+    private String crewPresent;
+
+    @Column(name = "materials_used")
+    private String materialsUsed;
+
+    @Column(name = "equipment_used")
+    private String equipmentUsed;
+
     @Column(name = "progress_notes")
     private String progressNotes;
+
+    @Column(name = "progress_percentage")
+    private BigDecimal progressPercentage;
 
     private String issues;
 
@@ -94,12 +106,44 @@ public class DailySiteLog {
         this.activities = activities;
     }
 
+    public String getCrewPresent() {
+        return crewPresent;
+    }
+
+    public void setCrewPresent(String crewPresent) {
+        this.crewPresent = crewPresent;
+    }
+
+    public String getMaterialsUsed() {
+        return materialsUsed;
+    }
+
+    public void setMaterialsUsed(String materialsUsed) {
+        this.materialsUsed = materialsUsed;
+    }
+
+    public String getEquipmentUsed() {
+        return equipmentUsed;
+    }
+
+    public void setEquipmentUsed(String equipmentUsed) {
+        this.equipmentUsed = equipmentUsed;
+    }
+
     public String getProgressNotes() {
         return progressNotes;
     }
 
     public void setProgressNotes(String progressNotes) {
         this.progressNotes = progressNotes;
+    }
+
+    public BigDecimal getProgressPercentage() {
+        return progressPercentage;
+    }
+
+    public void setProgressPercentage(BigDecimal progressPercentage) {
+        this.progressPercentage = progressPercentage;
     }
 
     public String getIssues() {

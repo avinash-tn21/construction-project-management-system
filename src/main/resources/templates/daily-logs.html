@@ -1,0 +1,1670 @@
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daily Site Logs | Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f4f6;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2937;
+        }
+
+        .page-layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            padding: 24px 15px;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            background: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .logo h2 {
+            margin: 0;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            display: block;
+            color: #9ca3af;
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 3px;
+        }
+
+        .nav-item,
+        .nav-sub-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 11px 13px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-item span,
+        .nav-sub-item span {
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item:hover,
+        .nav-sub-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: white;
+        }
+
+        .nav-item.active,
+        .nav-sub-item.active {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .nav-sub-item {
+            padding-left: 42px;
+            font-size: 13px;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 20px;
+        }
+
+        .system-status {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 7px;
+        }
+
+        /* MAIN */
+
+        .main-content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 35px 40px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 27px;
+            color: #111827;
+        }
+
+        .page-header p {
+            margin: 6px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .primary-button {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .primary-button:hover {
+            background: #d97706;
+        }
+
+        /* FILTERS */
+
+        .filter-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 13px;
+        }
+
+        /* TABLE */
+
+        .table-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #6b7280;
+            font-size: 12px;
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            vertical-align: top;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        .progress-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #fff7df;
+            color: #b45309;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .issue-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #fff1f2;
+            color: #be123c;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .small-button {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .edit-button {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .delete-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #9ca3af;
+            padding: 35px;
+        }
+
+        /* MODAL */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .close-button {
+            border: none;
+            background: transparent;
+            font-size: 25px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .form-group textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .secondary-button {
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .secondary-button:hover {
+            background: #f3f4f6;
+        }
+
+        .save-button {
+            border: none;
+            background: #f59e0b;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .save-button:hover {
+            background: #d97706;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+                width: calc(100% - 210px);
+                padding: 25px;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">C</div>
+
+            <div>
+                <h2>CONSTRUCT</h2>
+                <span>MANAGEMENT</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects" class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="/clients" class="nav-item">
+                <span>👤</span>
+                Clients
+            </a>
+
+            <a href="/contractors" class="nav-item">
+                <span>🏗</span>
+                Contractors
+            </a>
+
+            <a href="/sites" class="nav-item">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <div class="nav-group">
+
+                <a href="/workforce" class="nav-item">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance" class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
+
+            <a href="/inventory" class="nav-item">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment" class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs" class="nav-item active">
+                <span>☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Daily Site Logs</h1>
+
+                <p>
+                    Record and monitor daily construction activities and progress.
+                </p>
+            </div>
+
+            <button
+                    class="primary-button"
+                    onclick="openAddModal()">
+
+                + Add Daily Log
+
+            </button>
+
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="filter-card">
+
+            <div class="filter-grid">
+
+                <div class="filter-group">
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search activities, site, supervisor..."
+                            oninput="loadLogs()">
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label>
+                        Site
+                    </label>
+
+                    <select
+                            id="siteFilter"
+                            onchange="loadLogs()">
+
+                        <option value="">
+                            All Sites
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label>
+                        Date
+                    </label>
+
+                    <input
+                            type="date"
+                            id="dateFilter"
+                            onchange="loadLogs()">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+                        <th>Site</th>
+                        <th>Supervisor</th>
+                        <th>Weather</th>
+                        <th>Temperature</th>
+                        <th>Activities</th>
+                        <th>Crew Present</th>
+                        <th>Materials Used</th>
+                        <th>Equipment Used</th>
+                        <th>Overall Progress</th>
+                        <th>Progress Notes</th>
+                        <th>Issues</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="logsTableBody">
+
+                    <tr>
+
+                        <td
+                                colspan="13"
+                                class="empty-row">
+
+                            Loading daily logs...
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+        class="modal-overlay"
+        id="logModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add Daily Site Log
+            </h2>
+
+            <button
+                    class="close-button"
+                    onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="logForm">
+
+            <input
+                    type="hidden"
+                    id="logId">
+
+
+            <div class="form-grid">
+
+
+                <!-- SITE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Site *
+                    </label>
+
+                    <select
+                            id="siteId"
+                            required>
+
+                        <option value="">
+                            Select Site
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SUPERVISOR -->
+
+                <div class="form-group">
+
+                    <label>
+                        Supervisor ID *
+                    </label>
+
+                    <input
+                            type="number"
+                            id="supervisorId"
+                            required
+                            placeholder="Supervisor ID">
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Date *
+                    </label>
+
+                    <input
+                            type="date"
+                            id="logDate"
+                            required>
+
+                </div>
+
+
+                <!-- WEATHER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Weather
+                    </label>
+
+                    <select id="weatherCondition">
+
+                        <option value="">
+                            Select Weather
+                        </option>
+
+                        <option value="Sunny">
+                            Sunny
+                        </option>
+
+                        <option value="Cloudy">
+                            Cloudy
+                        </option>
+
+                        <option value="Rainy">
+                            Rainy
+                        </option>
+
+                        <option value="Windy">
+                            Windy
+                        </option>
+
+                        <option value="Stormy">
+                            Stormy
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TEMPERATURE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Temperature (°C)
+                    </label>
+
+                    <input
+                            type="number"
+                            id="temperature"
+                            step="0.1"
+                            placeholder="e.g. 29.5">
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Overall Progress (%)
+                    </label>
+
+                    <input
+                            type="number"
+                            id="progressPercentage"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            placeholder="e.g. 45">
+
+                </div>
+
+
+                <!-- ACTIVITIES -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Activities *
+                    </label>
+
+                    <textarea
+                            id="activities"
+                            required
+                            placeholder="Describe today's construction activities..."></textarea>
+
+                </div>
+
+
+                <!-- CREW PRESENT -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Crew Present
+                    </label>
+
+                    <textarea
+                            id="crewPresent"
+                            placeholder="e.g. 8 workers - 2 masons, 4 labourers, 2 electricians..."></textarea>
+
+                </div>
+
+
+                <!-- MATERIALS USED -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Materials Used
+                    </label>
+
+                    <textarea
+                            id="materialsUsed"
+                            placeholder="e.g. Cement - 20 bags, Sand - 2 m³, Steel - 500 kg..."></textarea>
+
+                </div>
+
+
+                <!-- EQUIPMENT USED -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Equipment Used
+                    </label>
+
+                    <textarea
+                            id="equipmentUsed"
+                            placeholder="e.g. Concrete Mixer, Excavator, Crane..."></textarea>
+
+                </div>
+
+
+                <!-- PROGRESS NOTES -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Progress Notes
+                    </label>
+
+                    <textarea
+                            id="progressNotes"
+                            placeholder="Describe progress, completed work, delays, etc."></textarea>
+
+                </div>
+
+
+                <!-- ISSUES -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Issues / Delays
+                    </label>
+
+                    <textarea
+                            id="issues"
+                            placeholder="Record any issues or delays..."></textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                        type="button"
+                        class="secondary-button"
+                        onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                        type="submit"
+                        class="save-button">
+
+                    Save Log
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let allLogs = [];
+    let sites = [];
+
+
+    /* =========================
+       LOAD SITES
+    ========================= */
+
+    async function loadSites() {
+
+        try {
+
+            const response = await fetch("/api/sites");
+
+            if (!response.ok) {
+                throw new Error("Failed to load sites");
+            }
+
+            sites = await response.json();
+
+            const siteSelect =
+                document.getElementById("siteId");
+
+            const siteFilter =
+                document.getElementById("siteFilter");
+
+            siteSelect.innerHTML =
+                '<option value="">Select Site</option>';
+
+            siteFilter.innerHTML =
+                '<option value="">All Sites</option>';
+
+
+            sites.forEach(site => {
+
+                siteSelect.innerHTML += `
+                    <option value="${site.siteId}">
+                        ${escapeHtml(site.siteName)}
+                    </option>
+                `;
+
+                siteFilter.innerHTML += `
+                    <option value="${site.siteId}">
+                        ${escapeHtml(site.siteName)}
+                    </option>
+                `;
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+
+    /* =========================
+       LOAD LOGS
+    ========================= */
+
+    async function loadLogs() {
+
+        try {
+
+            const response =
+                await fetch("/api/daily-site-logs");
+
+            if (!response.ok) {
+                throw new Error("Failed to load daily logs");
+            }
+
+            allLogs = await response.json();
+
+            displayLogs();
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById("logsTableBody").innerHTML = `
+                <tr>
+                    <td colspan="13" class="empty-row">
+                        Failed to load daily logs.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+    }
+
+
+    /* =========================
+       DISPLAY LOGS
+    ========================= */
+
+    function displayLogs() {
+
+        const search =
+            document.getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+        const selectedSite =
+            document.getElementById("siteFilter").value;
+
+        const selectedDate =
+            document.getElementById("dateFilter").value;
+
+
+        const filtered =
+            allLogs.filter(log => {
+
+                const site =
+                    sites.find(
+                        s =>
+                            Number(s.siteId) ===
+                            Number(log.siteId)
+                    );
+
+                const siteName =
+                    site ? site.siteName : "";
+
+
+                const matchesSearch =
+                    !search ||
+                    siteName.toLowerCase().includes(search) ||
+                    String(log.activities || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.progressNotes || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.crewPresent || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.materialsUsed || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.equipmentUsed || "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.progressPercentage ?? "")
+                        .toLowerCase()
+                        .includes(search) ||
+                    String(log.issues || "")
+                        .toLowerCase()
+                        .includes(search);
+
+
+                const matchesSite =
+                    !selectedSite ||
+                    Number(log.siteId) ===
+                    Number(selectedSite);
+
+
+                const matchesDate =
+                    !selectedDate ||
+                    log.logDate === selectedDate;
+
+
+                return (
+                    matchesSearch &&
+                    matchesSite &&
+                    matchesDate
+                );
+
+            });
+
+
+        const tbody =
+            document.getElementById("logsTableBody");
+
+
+        if (filtered.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="13" class="empty-row">
+                        No daily logs found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        tbody.innerHTML =
+            filtered.map(log => {
+
+                const site =
+                    sites.find(
+                        s =>
+                            Number(s.siteId) ===
+                            Number(log.siteId)
+                    );
+
+
+                const siteName =
+                    site
+                        ? site.siteName
+                        : `Site #${log.siteId}`;
+
+
+                const progress =
+                    log.progressPercentage !== null &&
+                    log.progressPercentage !== undefined &&
+                    log.progressPercentage !== ""
+                        ? `${escapeHtml(log.progressPercentage)}%`
+                        : "-";
+
+
+                const issue =
+                    log.issues &&
+                    log.issues.trim() !== ""
+                        ? `<span class="issue-badge">
+                                ${escapeHtml(log.issues)}
+                           </span>`
+                        : "-";
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${escapeHtml(log.logDate || "-")}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(siteName)}
+                            </strong>
+                        </td>
+
+                        <td>
+                            #${escapeHtml(log.supervisorId ?? "-")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.weatherCondition || "-")}
+                        </td>
+
+                        <td>
+                            ${log.temperature !== null &&
+                log.temperature !== undefined
+                    ? `${escapeHtml(log.temperature)} °C`
+                    : "-"}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.activities || "-")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.crewPresent || "-")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.materialsUsed || "-")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.equipmentUsed || "-")}
+                        </td>
+
+                        <td>
+                            ${
+                    progress !== "-"
+                        ? `<span class="progress-badge">
+                                            ${progress}
+                                       </span>`
+                        : "-"
+                }
+                        </td>
+
+                        <td>
+                            ${escapeHtml(log.progressNotes || "-")}
+                        </td>
+
+                        <td>
+                            ${issue}
+                        </td>
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <button
+                                        class="small-button edit-button"
+                                        onclick="editLog(${log.logId})">
+
+                                    Edit
+
+                                </button>
+
+                                <button
+                                        class="small-button delete-button"
+                                        onclick="deleteLog(${log.logId})">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =========================
+       OPEN ADD MODAL
+    ========================= */
+
+    function openAddModal() {
+
+        document.getElementById("modalTitle")
+            .textContent = "Add Daily Site Log";
+
+        document.getElementById("logForm").reset();
+
+        document.getElementById("logId").value = "";
+
+        setToday();
+
+        document.getElementById("logModal")
+            .classList.add("show");
+
+    }
+
+
+    /* =========================
+       EDIT LOG
+    ========================= */
+
+    function editLog(id) {
+
+        const log =
+            allLogs.find(
+                item =>
+                    Number(item.logId) ===
+                    Number(id)
+            );
+
+
+        if (!log) {
+            return;
+        }
+
+
+        document.getElementById("modalTitle")
+            .textContent = "Edit Daily Site Log";
+
+
+        document.getElementById("logId").value =
+            log.logId;
+
+
+        document.getElementById("siteId").value =
+            log.siteId ?? "";
+
+
+        document.getElementById("supervisorId").value =
+            log.supervisorId ?? "";
+
+
+        document.getElementById("logDate").value =
+            log.logDate ?? "";
+
+
+        document.getElementById("weatherCondition").value =
+            log.weatherCondition ?? "";
+
+
+        document.getElementById("temperature").value =
+            log.temperature ?? "";
+
+
+        document.getElementById("progressPercentage").value =
+            log.progressPercentage ?? "";
+
+
+        document.getElementById("activities").value =
+            log.activities ?? "";
+
+
+        document.getElementById("crewPresent").value =
+            log.crewPresent ?? "";
+
+
+        document.getElementById("materialsUsed").value =
+            log.materialsUsed ?? "";
+
+
+        document.getElementById("equipmentUsed").value =
+            log.equipmentUsed ?? "";
+
+
+        document.getElementById("progressNotes").value =
+            log.progressNotes ?? "";
+
+
+        document.getElementById("issues").value =
+            log.issues ?? "";
+
+
+        document.getElementById("logModal")
+            .classList.add("show");
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL
+    ========================= */
+
+    function closeModal() {
+
+        document.getElementById("logModal")
+            .classList.remove("show");
+
+    }
+
+
+    /* =========================
+       SET TODAY
+    ========================= */
+
+    function setToday() {
+
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+        document.getElementById("logDate").value =
+            today;
+
+    }
+
+
+    /* =========================
+       SAVE LOG
+    ========================= */
+
+    document.getElementById("logForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const progressInput =
+                document.getElementById("progressPercentage").value;
+
+
+            const progress =
+                progressInput === ""
+                    ? null
+                    : Number(progressInput);
+
+
+            if (
+                progress !== null &&
+                (progress < 0 || progress > 100)
+            ) {
+
+                alert(
+                    "Overall progress must be between 0 and 100."
+                );
+
+                return;
+
+            }
+
+
+            const logId =
+                document.getElementById("logId").value;
+
+
+            const logData = {
+
+                siteId:
+                    Number(
+                        document.getElementById("siteId").value
+                    ),
+
+                supervisorId:
+                    Number(
+                        document.getElementById("supervisorId").value
+                    ),
+
+                logDate:
+                document.getElementById("logDate").value,
+
+                weatherCondition:
+                document.getElementById("weatherCondition").value,
+
+                temperature:
+                    document.getElementById("temperature").value
+                        ? Number(
+                            document.getElementById("temperature").value
+                        )
+                        : null,
+
+                activities:
+                document.getElementById("activities").value,
+
+                crewPresent:
+                document.getElementById("crewPresent").value,
+
+                materialsUsed:
+                document.getElementById("materialsUsed").value,
+
+                equipmentUsed:
+                document.getElementById("equipmentUsed").value,
+
+                progressPercentage:
+                progress,
+
+                progressNotes:
+                document.getElementById("progressNotes").value,
+
+                issues:
+                document.getElementById("issues").value
+
+            };
+
+
+            try {
+
+                const url =
+                    logId
+                        ? `/api/daily-site-logs/${logId}`
+                        : "/api/daily-site-logs";
+
+
+                const method =
+                    logId
+                        ? "PUT"
+                        : "POST";
+
+
+                const response =
+                    await fetch(url, {
+
+                        method: method,
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(logData)
+
+                    });
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to save daily log"
+                    );
+
+                }
+
+
+                alert(
+                    logId
+                        ? "Daily log updated successfully."
+                        : "Daily log saved successfully."
+                );
+
+
+                closeModal();
+
+                await loadLogs();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Failed to save daily log."
+                );
+
+            }
+
+        });
+
+
+    /* =========================
+       DELETE LOG
+    ========================= */
+
+    async function deleteLog(id) {
+
+        if (
+            !confirm(
+                "Are you sure you want to delete this daily log?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/daily-site-logs/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to delete daily log"
+                );
+
+            }
+
+
+            alert(
+                "Daily log deleted successfully."
+            );
+
+
+            await loadLogs();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Failed to delete daily log."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       ESCAPE HTML
+    ========================= */
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================
+       INITIAL LOAD
+    ========================= */
+
+    async function initializePage() {
+
+        await loadSites();
+
+        await loadLogs();
+
+    }
+
+
+    initializePage();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div style="padding:40px;">
+
+    <h1>Notifications</h1>
+
+    <p>
+        Logged in User ID:
+        <strong th:text="${currentUserId}"></strong>
+    </p>
+
+    <p>
+        Role:
+        <strong th:text="${currentUserRole}"></strong>
+    </p>
+
+    <hr>
+
+    <h2>Your Notifications</h2>
+
+    <div id="notifications">
+        Loading...
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    const currentUserId = [[${currentUserId}]];
+
+    fetch(`/api/notifications/user/${currentUserId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to load notifications");
+            }
+            return response.json();
+        })
+        .then(notifications => {
+
+            const container = document.getElementById("notifications");
+
+            if (notifications.length === 0) {
+                container.innerHTML = "<p>No notifications yet.</p>";
+                return;
+            }
+
+            container.innerHTML = notifications.map(n => `
+                <div style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    margin:10px 0;
+                    border-radius:8px;
+                    background:${n.status === 'UNREAD' ? '#fff8e1' : '#f5f5f5'};
+                ">
+                    <h3>${n.title}</h3>
+
+                    <p>${n.message}</p>
+
+                    <small>
+                        ${n.status} · ${n.createdAt || ''}
+                    </small>
+
+                    ${
+                n.status === 'UNREAD'
+                    ? `<br><br>
+                           <button onclick="markRead(${n.notificationId})">
+                               Mark as Read
+                           </button>`
+                    : ''
+            }
+                </div>
+            `).join("");
+        })
+        .catch(error => {
+            document.getElementById("notifications").innerHTML =
+                "<p>Could not load notifications.</p>";
+
+            console.error(error);
+        });
+
+    function markRead(id) {
+
+        fetch(`/api/notifications/${id}/read`, {
+            method: "PUT"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to mark notification as read");
+                }
+
+                location.reload();
+            });
+    }
+</script>
+
+</body>
+</html>
