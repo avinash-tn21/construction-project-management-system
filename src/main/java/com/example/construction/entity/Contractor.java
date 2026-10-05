@@ -14,9 +14,6 @@ public class Contractor {
     @Column(name = "contractor_name", nullable = false)
     private String contractorName;
 
-    @Column(name = "company_name")
-    private String companyName;
-
     private String phone;
 
     @Column(unique = true)
@@ -41,14 +38,6 @@ public class Contractor {
 
     public void setContractorName(String contractorName) {
         this.contractorName = contractorName;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
     }
 
     public String getPhone() {
