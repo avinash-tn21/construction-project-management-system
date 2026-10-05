@@ -14,13 +14,25 @@ public class EquipmentController {
     private final EquipmentService equipmentService;
 
     public EquipmentController(EquipmentService equipmentService) {
+
         this.equipmentService = equipmentService;
     }
 
+
+    // =========================
+    // GET ALL EQUIPMENT
+    // =========================
+
     @GetMapping
     public List<Equipment> getAllEquipment() {
+
         return equipmentService.getAllEquipment();
     }
+
+
+    // =========================
+    // GET EQUIPMENT BY ID
+    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipment> getEquipmentById(
@@ -31,14 +43,25 @@ public class EquipmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
+    // =========================
+    // CREATE EQUIPMENT
+    // =========================
+
     @PostMapping
     public ResponseEntity<Equipment> createEquipment(
             @RequestBody Equipment equipment) {
 
-        return ResponseEntity.ok(
-                equipmentService.saveEquipment(equipment)
-        );
+        Equipment savedEquipment =
+                equipmentService.saveEquipment(equipment);
+
+        return ResponseEntity.ok(savedEquipment);
     }
+
+
+    // =========================
+    // UPDATE EQUIPMENT
+    // =========================
 
     @PutMapping("/{id}")
     public ResponseEntity<Equipment> updateEquipment(
@@ -47,27 +70,30 @@ public class EquipmentController {
 
         try {
 
-            return ResponseEntity.ok(
+            Equipment updatedEquipment =
                     equipmentService.updateEquipment(
                             id,
                             equipment
-                    )
-            );
+                    );
+
+            return ResponseEntity.ok(updatedEquipment);
 
         } catch (RuntimeException e) {
 
             return ResponseEntity.notFound().build();
-
         }
     }
+
+
+    // =========================
+    // DELETE EQUIPMENT
+    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEquipment(
             @PathVariable Integer id) {
 
-        if (equipmentService
-                .getEquipmentById(id)
-                .isEmpty()) {
+        if (equipmentService.getEquipmentById(id).isEmpty()) {
 
             return ResponseEntity.notFound().build();
         }
