@@ -1,0 +1,3551 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory | Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+
+        /* =====================================================
+           NOTIFICATION BELL
+           ===================================================== */
+
+        .notification-wrapper {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .notification-button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-button:hover {
+            background: #f8fafc;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 17px;
+            height: 17px;
+            padding: 0 4px;
+            border-radius: 20px;
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid #e5e7eb;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 17px;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .notification-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .notification-header span {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        .notification-list {
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .notification-item:hover {
+            background: #fafafa;
+        }
+
+        .notification-item.unread {
+            background: #fffbeb;
+        }
+
+        .notification-item.unread:hover {
+            background: #fef3c7;
+        }
+
+        .notification-item-top {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .notification-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #fef3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.45;
+        }
+
+        .notification-time {
+            font-size: 9px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+
+        .notification-read-button {
+            border: none;
+            background: none;
+            color: #d97706;
+            font-size: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 6px;
+            padding: 0;
+        }
+
+        .notification-read-button:hover {
+            text-decoration: underline;
+        }
+
+        .notification-empty {
+            padding: 35px 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .notification-footer {
+            padding: 10px;
+            text-align: center;
+            border-top: 1px solid #edf0f2;
+            background: #fafafa;
+        }
+
+        .notification-footer button {
+            border: none;
+            background: none;
+            color: #d97706;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+
+            .notification-dropdown {
+                position: fixed;
+                top: 70px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+
+        }
+
+
+        /* =====================================================
+           INVENTORY
+           ===================================================== */
+
+        .inventory-toolbar,
+        .request-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .inventory-search input,
+        .request-search input {
+            width: 280px;
+            padding: 10px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 7px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .inventory-search input:focus,
+        .request-search input:focus {
+            border-color: #f59e0b;
+        }
+
+        .add-button {
+            border: none;
+            background: #f59e0b;
+            color: #17212b;
+            padding: 10px 16px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #d97706;
+        }
+
+
+        /* =====================================================
+           SUMMARY
+           ===================================================== */
+
+        .inventory-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .inventory-summary-card {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .inventory-summary-card p {
+            color: #7b8490;
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .inventory-summary-card h2 {
+            font-size: 23px;
+        }
+
+        .inventory-summary-card small {
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+        .inventory-summary {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .inventory-summary-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .inventory-summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .normal-card {
+            border-left: 4px solid #22c55e;
+        }
+
+        .low-card {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .out-card {
+            border-left: 4px solid #ef4444;
+        }
+
+        .normal-card h2 { color: #15803d; }
+        .low-card h2 { color: #b45309; }
+        .out-card h2 { color: #b91c1c; }
+
+        .inventory-filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .inventory-filter-bar select {
+            min-width: 170px;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 7px;
+            background: white;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .inventory-filter-bar select:focus {
+            border-color: #f59e0b;
+        }
+
+        .clear-filter-button {
+            border: 1px solid #e5e7eb;
+            background: white;
+            padding: 10px 14px;
+            border-radius: 7px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .clear-filter-button:hover {
+            background: #f8fafc;
+        }
+
+        .low-stock-row {
+            background: #fffbeb !important;
+        }
+
+        .out-of-stock-row {
+            background: #fff7f7 !important;
+        }
+
+        .stock-warning {
+            font-size: 10px;
+            color: #b45309;
+            margin-top: 3px;
+            display: block;
+        }
+
+        .stock-danger {
+            font-size: 10px;
+            color: #b91c1c;
+            margin-top: 3px;
+            display: block;
+        }
+
+        @media (max-width: 1000px) {
+            .inventory-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .inventory-table-wrapper,
+        .request-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .inventory-table,
+        .request-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inventory-table th,
+        .request-table th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #f8fafc;
+            color: #6b7280;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .inventory-table td,
+        .request-table td {
+            padding: 15px 12px;
+            font-size: 12px;
+            border-bottom: 1px solid #edf0f2;
+            vertical-align: middle;
+        }
+
+        .inventory-table tr:hover,
+        .request-table tr:hover {
+            background: #fafafa;
+        }
+
+        .item-name,
+        .request-project {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .quantity {
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           STATUS BADGES
+           ===================================================== */
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-low {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .status-out {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .request-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .request-approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .request-rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .request-completed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+           ===================================================== */
+
+        .action-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .table-button {
+            border: 1px solid #e5e7eb;
+            background: white;
+            padding: 6px 9px;
+            border-radius: 5px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .table-button:hover {
+            background: #f3f4f6;
+        }
+
+
+        /* =====================================================
+           MODALS
+           ===================================================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 450px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-button {
+            border: none;
+            background: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            outline: none;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #f59e0b;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-button {
+            border: 1px solid #e5e7eb;
+            background: white;
+            padding: 9px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .save-button {
+            border: none;
+            background: #f59e0b;
+            color: #17212b;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #d97706;
+        }
+
+
+        /* =====================================================
+           SECTION SPACING
+           ===================================================== */
+
+        .requests-panel {
+            margin-top: 20px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .inventory-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .inventory-toolbar,
+            .request-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .inventory-search input,
+            .request-search input {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                C
+            </div>
+
+            <div>
+                <h2>CONSTRUCT</h2>
+                <span>MANAGEMENT</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="/dashboard" class="nav-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects" class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="/clients" class="nav-item">
+                <span>👤</span>
+                Clients
+            </a>
+
+            <a href="/contractors" class="nav-item">
+                <span>🏗</span>
+                Contractors
+            </a>
+
+            <a href="/sites" class="nav-item">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <div class="nav-group">
+
+                <a href="/workforce" class="nav-item">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance" class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
+
+            <a href="/inventory" class="nav-item active">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment" class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs" class="nav-item">
+                <span>☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">
+                    Inventory Management
+                </p>
+
+                <h1>
+                    Inventory
+                </h1>
+
+            </div>
+
+
+            <!-- =================================================
+                 NOTIFICATION + PROFILE
+                 ================================================= -->
+
+            <div style="display:flex; align-items:center;">
+
+                <div class="notification-wrapper">
+
+                    <button
+                            type="button"
+                            class="notification-button"
+                            id="notificationButton"
+                            onclick="toggleNotifications(event)"
+                            title="Notifications">
+
+                        🔔
+
+                        <span
+                                class="notification-badge"
+                                id="notificationBadge">
+                        </span>
+
+                    </button>
+
+
+                    <div
+                            class="notification-dropdown"
+                            id="notificationDropdown">
+
+                        <div class="notification-header">
+
+                            <h3>
+                                Notifications
+                            </h3>
+
+                            <span id="notificationCount">
+                                0 unread
+                            </span>
+
+                        </div>
+
+
+                        <div
+                                class="notification-list"
+                                id="notificationList">
+
+                            <div class="notification-empty">
+                                Loading notifications...
+                            </div>
+
+                        </div>
+
+
+                        <div class="notification-footer">
+
+                            <button
+                                    type="button"
+                                    onclick="markAllNotificationsRead()">
+
+                                Mark all as read
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             INVENTORY SUMMARY
+             ================================================= -->
+
+        <section class="inventory-summary">
+
+            <div class="inventory-summary-card">
+                <p>TOTAL ITEMS</p>
+                <h2 id="totalItems">0</h2>
+                <small>Inventory records</small>
+            </div>
+
+            <div class="inventory-summary-card normal-card">
+                <p>NORMAL STOCK</p>
+                <h2 id="normalStock">0</h2>
+                <small>Items above reorder level</small>
+            </div>
+
+            <div class="inventory-summary-card low-card">
+                <p>LOW STOCK</p>
+                <h2 id="lowStock">0</h2>
+                <small>Items requiring attention</small>
+            </div>
+
+            <div class="inventory-summary-card out-card">
+                <p>OUT OF STOCK</p>
+                <h2 id="outOfStock">0</h2>
+                <small>Items currently unavailable</small>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             INVENTORY ITEMS
+             ================================================= -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="section-label">
+                        STOCK MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Inventory Items
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="inventory-toolbar">
+
+                <div class="inventory-search">
+
+                    <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search inventory..."
+                            onkeyup="searchInventory()">
+
+                </div>
+
+
+                <button
+                        class="add-button"
+                        onclick="openAddModal()">
+
+                    ＋ Add Inventory Item
+
+                </button>
+
+            </div>
+
+            <div class="inventory-filter-bar">
+
+                <select id="categoryFilter" onchange="applyInventoryFilters()">
+                    <option value="">All Categories</option>
+                </select>
+
+                <select id="supplierFilter" onchange="applyInventoryFilters()">
+                    <option value="">All Suppliers</option>
+                </select>
+
+                <select id="stockFilter" onchange="applyInventoryFilters()">
+                    <option value="">All Stock Status</option>
+                    <option value="NORMAL">Normal Stock</option>
+                    <option value="LOW STOCK">Low Stock</option>
+                    <option value="OUT OF STOCK">Out of Stock</option>
+                </select>
+
+                <button type="button" class="clear-filter-button" onclick="clearInventoryFilters()">
+                    Clear Filters
+                </button>
+
+            </div>
+
+
+            <div class="inventory-table-wrapper">
+
+                <table class="inventory-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Reorder Level</th>
+                        <th>Supplier</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="inventoryTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MATERIAL REQUESTS
+             ================================================= -->
+
+        <section class="panel requests-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="section-label">
+                        MATERIAL MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Material Requests
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="request-toolbar">
+
+                <div class="request-search">
+
+                    <input
+                            type="text"
+                            id="requestSearchInput"
+                            placeholder="Search material requests..."
+                            onkeyup="searchRequests()">
+
+                </div>
+
+
+                <button
+                        class="add-button"
+                        onclick="openAddRequestModal()">
+
+                    ＋ New Material Request
+
+                </button>
+
+            </div>
+
+
+            <div class="request-table-wrapper">
+
+                <table class="request-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Project</th>
+                        <th>Material</th>
+                        <th>Quantity</th>
+                        <th>Requested By</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="requestTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     INVENTORY MODAL
+     ===================================================== -->
+
+<div id="inventoryModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add Inventory Item
+            </h2>
+
+            <button
+                    class="close-button"
+                    onclick="closeModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="inventoryForm">
+
+            <input
+                    type="hidden"
+                    id="inventoryId">
+
+
+            <div class="form-group">
+
+                <label>
+                    Item Name
+                </label>
+
+                <input
+                        type="text"
+                        id="itemName"
+                        required>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input
+                            type="text"
+                            id="category">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Unit
+                    </label>
+
+                    <input
+                            type="text"
+                            id="unit"
+                            placeholder="Bags, Pieces, kg...">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Quantity
+                    </label>
+
+                    <input
+                            type="number"
+                            id="quantity"
+                            min="0"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Reorder Level
+                    </label>
+
+                    <input
+                            type="number"
+                            id="reorderLevel"
+                            min="0">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Supplier
+                </label>
+
+                <input
+                        type="text"
+                        id="supplier">
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="closeModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                        type="submit"
+                        class="save-button">
+
+                    Save Item
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MATERIAL REQUEST MODAL
+     ===================================================== -->
+
+<div id="requestModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="requestModalTitle">
+                New Material Request
+            </h2>
+
+            <button
+                    class="close-button"
+                    onclick="closeRequestModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="requestForm">
+
+            <input
+                    type="hidden"
+                    id="requestId">
+
+
+            <div class="form-group">
+
+                <label>
+                    Project
+                </label>
+
+                <select
+                        id="requestProject"
+                        required>
+
+                    <option value="">
+                        Select Project
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Material
+                </label>
+
+                <select
+                        id="requestInventory"
+                        required>
+
+                    <option value="">
+                        Select Material
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Requested By
+                </label>
+
+                <select
+                        id="requestUser"
+                        required>
+
+                    <option value="">
+                        Select User
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        Quantity
+                    </label>
+
+                    <input
+                            type="number"
+                            id="requestQuantity"
+                            min="1"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Request Date
+                    </label>
+
+                    <input
+                            type="date"
+                            id="requestDate"
+                            required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select
+                        id="requestStatus"
+                        required>
+
+                    <option value="PENDING">
+                        PENDING
+                    </option>
+
+                    <option value="APPROVED">
+                        APPROVED
+                    </option>
+
+                    <option value="REJECTED">
+                        REJECTED
+                    </option>
+
+                    <option value="COMPLETED">
+                        COMPLETED
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Remarks
+                </label>
+
+                <textarea
+                        id="requestRemarks"
+                        placeholder="Enter request details..."></textarea>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="closeRequestModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                        type="submit"
+                        class="save-button">
+
+                    Save Request
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+    let inventoryItems = [];
+
+    let materialRequests = [];
+
+    let projects = [];
+
+    let users = [];
+
+
+    /* =====================================================
+       LOAD INVENTORY
+       ===================================================== */
+
+    async function loadInventory() {
+
+        try {
+
+            const response =
+                await fetch("/api/inventory");
+
+            if (!response.ok) {
+                throw new Error("Failed to load inventory");
+            }
+
+            inventoryItems =
+                await response.json();
+
+            populateInventoryFilters();
+
+            displayInventory(
+                inventoryItems
+            );
+
+            updateSummary();
+
+        } catch (error) {
+
+            console.error(
+                "Error loading inventory:",
+                error
+            );
+
+            alert(
+                "Could not load inventory."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LOAD MATERIAL REQUEST DATA
+       ===================================================== */
+
+    async function loadRequestData() {
+
+        try {
+
+            const [
+                requestsResponse,
+                projectsResponse,
+                usersResponse,
+                inventoryResponse
+            ] = await Promise.all([
+
+                fetch("/api/material-requests"),
+
+                fetch("/api/projects"),
+
+                fetch("/api/users"),
+
+                fetch("/api/inventory")
+
+            ]);
+
+
+            if (!requestsResponse.ok) {
+                throw new Error(
+                    "Failed to load material requests"
+                );
+            }
+
+            if (!projectsResponse.ok) {
+                throw new Error(
+                    "Failed to load projects"
+                );
+            }
+
+            if (!usersResponse.ok) {
+                throw new Error(
+                    "Failed to load users"
+                );
+            }
+
+            if (!inventoryResponse.ok) {
+                throw new Error(
+                    "Failed to load inventory"
+                );
+            }
+
+
+            materialRequests =
+                await requestsResponse.json();
+
+            projects =
+                await projectsResponse.json();
+
+            users =
+                await usersResponse.json();
+
+            inventoryItems =
+                await inventoryResponse.json();
+
+            populateInventoryFilters();
+
+            populateProjectDropdown();
+
+            populateInventoryDropdown();
+
+            populateUserDropdown();
+
+            displayRequests(
+                materialRequests
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Error loading material request data:",
+                error
+            );
+
+            alert(
+                "Could not load material request data."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DISPLAY INVENTORY
+       ===================================================== */
+
+    function displayInventory(items) {
+
+        const tableBody =
+            document.getElementById("inventoryTableBody");
+
+        tableBody.innerHTML = "";
+
+        if (items.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align:center; padding:40px; color:#9ca3af;">
+                        No inventory items match the selected criteria.
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        items.forEach(item => {
+
+            const quantity = Number(item.quantity);
+            const reorderLevel =
+                item.reorderLevel === null || item.reorderLevel === undefined
+                    ? null
+                    : Number(item.reorderLevel);
+
+            let statusClass = "status-available";
+            let displayStatus = "AVAILABLE";
+            let rowClass = "";
+            let stockMessage = "";
+
+            if (quantity === 0) {
+                statusClass = "status-out";
+                displayStatus = "OUT OF STOCK";
+                rowClass = "out-of-stock-row";
+                stockMessage = '<span class="stock-danger">Material unavailable</span>';
+            } else if (reorderLevel !== null && quantity <= reorderLevel) {
+                statusClass = "status-low";
+                displayStatus = "LOW STOCK";
+                rowClass = "low-stock-row";
+                stockMessage = '<span class="stock-warning">Reorder recommended</span>';
+            }
+
+            const row = document.createElement("tr");
+            row.className = rowClass;
+
+            row.innerHTML = `
+                <td>
+                    <span class="item-name">${escapeHtml(item.itemName)}</span>
+                </td>
+                <td>${escapeHtml(item.category || "-")}</td>
+                <td>
+                    <span class="quantity">${quantity}</span>
+                    ${stockMessage}
+                </td>
+                <td>${escapeHtml(item.unit || "-")}</td>
+                <td>${reorderLevel ?? "-"}</td>
+                <td>${escapeHtml(item.supplier || "-")}</td>
+                <td>
+                    <span class="status-badge ${statusClass}">${displayStatus}</span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="table-button" onclick="openEditModal(${item.inventoryId})">Edit</button>
+                        <button class="table-button" onclick="deleteItem(${item.inventoryId})">Delete</button>
+                    </div>
+                </td>`;
+
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    /* =====================================================
+       UPDATE SUMMARY
+       ===================================================== */
+
+    function updateSummary() {
+
+        const totalItems = inventoryItems.length;
+        let normalStock = 0;
+        let lowStock = 0;
+        let outOfStock = 0;
+
+        inventoryItems.forEach(item => {
+
+            const quantity = Number(item.quantity);
+            const reorderLevel =
+                item.reorderLevel === null || item.reorderLevel === undefined
+                    ? null
+                    : Number(item.reorderLevel);
+
+            if (quantity === 0) {
+                outOfStock++;
+            } else if (reorderLevel !== null && quantity <= reorderLevel) {
+                lowStock++;
+            } else {
+                normalStock++;
+            }
+        });
+
+        document.getElementById("totalItems").textContent = totalItems;
+        document.getElementById("normalStock").textContent = normalStock;
+        document.getElementById("lowStock").textContent = lowStock;
+        document.getElementById("outOfStock").textContent = outOfStock;
+    }
+
+
+    /* =====================================================
+       INVENTORY FILTER OPTIONS
+       ===================================================== */
+
+    function populateInventoryFilters() {
+
+        const categoryFilter = document.getElementById("categoryFilter");
+        const supplierFilter = document.getElementById("supplierFilter");
+
+        if (!categoryFilter || !supplierFilter) return;
+
+        const currentCategory = categoryFilter.value;
+        const currentSupplier = supplierFilter.value;
+
+        const categories = [...new Set(
+            inventoryItems
+                .map(item => item.category)
+                .filter(value => value)
+        )].sort();
+
+        const suppliers = [...new Set(
+            inventoryItems
+                .map(item => item.supplier)
+                .filter(value => value)
+        )].sort();
+
+        categoryFilter.innerHTML = '<option value="">All Categories</option>';
+        supplierFilter.innerHTML = '<option value="">All Suppliers</option>';
+
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+
+        suppliers.forEach(supplier => {
+            const option = document.createElement("option");
+            option.value = supplier;
+            option.textContent = supplier;
+            supplierFilter.appendChild(option);
+        });
+
+        categoryFilter.value = categories.includes(currentCategory) ? currentCategory : "";
+        supplierFilter.value = suppliers.includes(currentSupplier) ? currentSupplier : "";
+    }
+
+
+    /* =====================================================
+       SEARCH + FILTER INVENTORY
+       ===================================================== */
+
+    function searchInventory() {
+        applyInventoryFilters();
+    }
+
+    function applyInventoryFilters() {
+
+        const search =
+            document.getElementById("searchInput").value.toLowerCase().trim();
+
+        const category = document.getElementById("categoryFilter").value;
+        const supplier = document.getElementById("supplierFilter").value;
+        const stockStatus = document.getElementById("stockFilter").value;
+
+        const filteredItems = inventoryItems.filter(item => {
+
+            const itemName = (item.itemName || "").toLowerCase();
+            const itemCategory = (item.category || "").toLowerCase();
+            const itemSupplier = (item.supplier || "").toLowerCase();
+            const itemUnit = (item.unit || "").toLowerCase();
+
+            const quantity = Number(item.quantity);
+            const reorderLevel =
+                item.reorderLevel === null || item.reorderLevel === undefined
+                    ? null
+                    : Number(item.reorderLevel);
+
+            let status = "NORMAL";
+
+            if (quantity === 0) {
+                status = "OUT OF STOCK";
+            } else if (reorderLevel !== null && quantity <= reorderLevel) {
+                status = "LOW STOCK";
+            }
+
+            const matchesSearch =
+                !search ||
+                itemName.includes(search) ||
+                itemCategory.includes(search) ||
+                itemSupplier.includes(search) ||
+                itemUnit.includes(search);
+
+            const matchesCategory = !category || item.category === category;
+            const matchesSupplier = !supplier || item.supplier === supplier;
+            const matchesStock = !stockStatus || status === stockStatus;
+
+            return matchesSearch && matchesCategory && matchesSupplier && matchesStock;
+        });
+
+        displayInventory(filteredItems);
+    }
+
+    function clearInventoryFilters() {
+
+        document.getElementById("searchInput").value = "";
+        document.getElementById("categoryFilter").value = "";
+        document.getElementById("supplierFilter").value = "";
+        document.getElementById("stockFilter").value = "";
+
+        displayInventory(inventoryItems);
+    }
+
+
+    /* =====================================================
+       ADD INVENTORY MODAL
+       ===================================================== */
+
+    function openAddModal() {
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Add Inventory Item";
+
+
+        document.getElementById(
+            "inventoryForm"
+        ).reset();
+
+
+        document.getElementById(
+            "inventoryId"
+        ).value = "";
+
+
+        document.getElementById(
+            "inventoryModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       EDIT INVENTORY MODAL
+       ===================================================== */
+
+    function openEditModal(id) {
+
+        const item =
+            inventoryItems.find(
+                item =>
+                    item.inventoryId === id
+            );
+
+
+        if (!item) {
+            return;
+        }
+
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Edit Inventory Item";
+
+
+        document.getElementById(
+            "inventoryId"
+        ).value =
+            item.inventoryId;
+
+
+        document.getElementById(
+            "itemName"
+        ).value =
+            item.itemName || "";
+
+
+        document.getElementById(
+            "category"
+        ).value =
+            item.category || "";
+
+
+        document.getElementById(
+            "unit"
+        ).value =
+            item.unit || "";
+
+
+        document.getElementById(
+            "quantity"
+        ).value =
+            item.quantity ?? 0;
+
+
+        document.getElementById(
+            "reorderLevel"
+        ).value =
+            item.reorderLevel ?? "";
+
+
+        document.getElementById(
+            "supplier"
+        ).value =
+            item.supplier || "";
+
+
+        document.getElementById(
+            "inventoryModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       CLOSE INVENTORY MODAL
+       ===================================================== */
+
+    function closeModal() {
+
+        document.getElementById(
+            "inventoryModal"
+        ).style.display =
+            "none";
+
+    }
+
+
+    /* =====================================================
+       SAVE INVENTORY
+       ===================================================== */
+
+    document.getElementById(
+        "inventoryForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById(
+                    "inventoryId"
+                ).value;
+
+
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "quantity"
+                    ).value
+                );
+
+
+            const reorderLevelValue =
+                document.getElementById(
+                    "reorderLevel"
+                ).value;
+
+
+            const reorderLevel =
+                reorderLevelValue === ""
+                    ? null
+                    : Number(
+                        reorderLevelValue
+                    );
+
+
+            let status =
+                "AVAILABLE";
+
+
+            if (quantity === 0) {
+
+                status =
+                    "OUT OF STOCK";
+
+            } else if (
+                reorderLevel !== null &&
+                quantity <= reorderLevel
+            ) {
+
+                status =
+                    "LOW STOCK";
+
+            }
+
+
+            const item = {
+
+                itemName:
+                    document.getElementById(
+                        "itemName"
+                    ).value.trim(),
+
+                category:
+                    document.getElementById(
+                        "category"
+                    ).value.trim(),
+
+                quantity:
+                quantity,
+
+                unit:
+                    document.getElementById(
+                        "unit"
+                    ).value.trim(),
+
+                reorderLevel:
+                reorderLevel,
+
+                supplier:
+                    document.getElementById(
+                        "supplier"
+                    ).value.trim(),
+
+                status:
+                status
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response =
+                        await fetch(
+                            "/api/inventory/" + id,
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(item)
+
+                            }
+                        );
+
+                } else {
+
+                    response =
+                        await fetch(
+                            "/api/inventory",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(item)
+
+                            }
+                        );
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to save inventory item"
+                    );
+
+                }
+
+
+                closeModal();
+
+                await loadInventory();
+
+                await loadRequestData();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error saving inventory item:",
+                    error
+                );
+
+                alert(
+                    "Could not save inventory item."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       DELETE INVENTORY ITEM
+       ===================================================== */
+
+    async function deleteItem(id) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this inventory item?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/inventory/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to delete inventory item"
+                );
+
+            }
+
+
+            await loadInventory();
+
+            await loadRequestData();
+
+
+        } catch (error) {
+
+            console.error(
+                "Error deleting inventory item:",
+                error
+            );
+
+            alert(
+                "Could not delete inventory item. It may be used by a material request."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PROJECT DROPDOWN
+       ===================================================== */
+
+    function populateProjectDropdown() {
+
+        const select =
+            document.getElementById(
+                "requestProject"
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+                Select Project
+            </option>
+
+        `;
+
+
+        projects.forEach(project => {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value =
+                project.projectId;
+
+
+            option.textContent =
+                project.projectName;
+
+
+            select.appendChild(option);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       INVENTORY DROPDOWN
+       ===================================================== */
+
+    function populateInventoryDropdown() {
+
+        const select =
+            document.getElementById(
+                "requestInventory"
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+                Select Material
+            </option>
+
+        `;
+
+
+        inventoryItems.forEach(item => {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value =
+                item.inventoryId;
+
+
+            option.textContent =
+                item.itemName +
+                " (" +
+                item.quantity +
+                " " +
+                (item.unit || "") +
+                ")";
+
+
+            select.appendChild(option);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       USER DROPDOWN
+       ===================================================== */
+
+    function populateUserDropdown() {
+
+        const select =
+            document.getElementById(
+                "requestUser"
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+                Select User
+            </option>
+
+        `;
+
+
+        users.forEach(user => {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value =
+                user.userId;
+
+
+            option.textContent =
+                user.fullName ||
+                user.username;
+
+
+            select.appendChild(option);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       DISPLAY MATERIAL REQUESTS
+       ===================================================== */
+
+    function displayRequests(requests) {
+
+        const tableBody =
+            document.getElementById(
+                "requestTableBody"
+            );
+
+
+        tableBody.innerHTML = "";
+
+
+        if (requests.length === 0) {
+
+            tableBody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="
+                            text-align:center;
+                            padding:40px;
+                            color:#9ca3af;
+                        ">
+
+                        No material requests available.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        requests.forEach(request => {
+
+            const projectName =
+                request.project
+                    ? request.project.projectName
+                    : "-";
+
+
+            const materialName =
+                request.inventoryItem
+                    ? request.inventoryItem.itemName
+                    : "-";
+
+
+            const requestedBy =
+                request.requestedBy
+                    ? (
+                        request.requestedBy.fullName ||
+                        request.requestedBy.username
+                    )
+                    : "-";
+
+
+            const status =
+                request.status || "PENDING";
+
+
+            let statusClass =
+                "request-pending";
+
+
+            if (status === "APPROVED") {
+
+                statusClass =
+                    "request-approved";
+
+            } else if (status === "REJECTED") {
+
+                statusClass =
+                    "request-rejected";
+
+            } else if (status === "COMPLETED") {
+
+                statusClass =
+                    "request-completed";
+
+            }
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <span class="request-project">
+                        ${escapeHtml(projectName)}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${escapeHtml(materialName)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${request.quantity}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHtml(requestedBy)}
+                </td>
+
+                <td>
+                    ${request.requestDate || "-"}
+                </td>
+
+                <td>
+
+                    <span
+                        class="status-badge ${statusClass}">
+
+                        ${escapeHtml(status)}
+
+                    </span>
+
+                </td>
+
+                <td>
+                    ${escapeHtml(request.remarks || "-")}
+                </td>
+
+                <td>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="table-button"
+                            onclick="openEditRequestModal(${request.requestId})">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                            class="table-button"
+                            onclick="deleteRequest(${request.requestId})">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SEARCH MATERIAL REQUESTS
+       ===================================================== */
+
+    function searchRequests() {
+
+        const search =
+            document.getElementById(
+                "requestSearchInput"
+            ).value
+                .toLowerCase();
+
+
+        const filteredRequests =
+            materialRequests.filter(request => {
+
+                const projectName =
+                    request.project
+                        ? request.project.projectName
+                        : "";
+
+
+                const materialName =
+                    request.inventoryItem
+                        ? request.inventoryItem.itemName
+                        : "";
+
+
+                const requestedBy =
+                    request.requestedBy
+                        ? (
+                            request.requestedBy.fullName ||
+                            request.requestedBy.username
+                        )
+                        : "";
+
+
+                return (
+
+                    projectName
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    materialName
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    requestedBy
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (request.status || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (request.remarks || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                );
+
+            });
+
+
+        displayRequests(
+            filteredRequests
+        );
+
+    }
+
+
+    /* =====================================================
+       OPEN ADD REQUEST MODAL
+       ===================================================== */
+
+    function openAddRequestModal() {
+
+        document.getElementById(
+            "requestModalTitle"
+        ).textContent =
+            "New Material Request";
+
+
+        document.getElementById(
+            "requestForm"
+        ).reset();
+
+
+        document.getElementById(
+            "requestId"
+        ).value = "";
+
+
+        document.getElementById(
+            "requestStatus"
+        ).value =
+            "PENDING";
+
+
+        document.getElementById(
+            "requestDate"
+        ).value =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+
+        document.getElementById(
+            "requestModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       OPEN EDIT REQUEST MODAL
+       ===================================================== */
+
+    function openEditRequestModal(id) {
+
+        const request =
+            materialRequests.find(
+                request =>
+                    request.requestId === id
+            );
+
+
+        if (!request) {
+            return;
+        }
+
+
+        document.getElementById(
+            "requestModalTitle"
+        ).textContent =
+            "Edit Material Request";
+
+
+        document.getElementById(
+            "requestId"
+        ).value =
+            request.requestId;
+
+
+        document.getElementById(
+            "requestProject"
+        ).value =
+            request.project
+                ? request.project.projectId
+                : "";
+
+
+        document.getElementById(
+            "requestInventory"
+        ).value =
+            request.inventoryItem
+                ? request.inventoryItem.inventoryId
+                : "";
+
+
+        document.getElementById(
+            "requestUser"
+        ).value =
+            request.requestedBy
+                ? request.requestedBy.userId
+                : "";
+
+
+        document.getElementById(
+            "requestQuantity"
+        ).value =
+            request.quantity ?? "";
+
+
+        document.getElementById(
+            "requestDate"
+        ).value =
+            request.requestDate || "";
+
+
+        document.getElementById(
+            "requestStatus"
+        ).value =
+            request.status || "PENDING";
+
+
+        document.getElementById(
+            "requestRemarks"
+        ).value =
+            request.remarks || "";
+
+
+        document.getElementById(
+            "requestModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       CLOSE REQUEST MODAL
+       ===================================================== */
+
+    function closeRequestModal() {
+
+        document.getElementById(
+            "requestModal"
+        ).style.display =
+            "none";
+
+    }
+
+
+    /* =====================================================
+       SAVE MATERIAL REQUEST
+       ===================================================== */
+
+    document.getElementById(
+        "requestForm"
+    ).addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById(
+                    "requestId"
+                ).value;
+
+
+            const projectId =
+                Number(
+                    document.getElementById(
+                        "requestProject"
+                    ).value
+                );
+
+
+            const inventoryId =
+                Number(
+                    document.getElementById(
+                        "requestInventory"
+                    ).value
+                );
+
+
+            const userId =
+                Number(
+                    document.getElementById(
+                        "requestUser"
+                    ).value
+                );
+
+
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "requestQuantity"
+                    ).value
+                );
+
+
+            const request = {
+
+                project: {
+                    projectId:
+                    projectId
+                },
+
+                inventoryItem: {
+                    inventoryId:
+                    inventoryId
+                },
+
+                requestedBy: {
+                    userId:
+                    userId
+                },
+
+                quantity:
+                quantity,
+
+                requestDate:
+                document.getElementById(
+                    "requestDate"
+                ).value,
+
+                status:
+                document.getElementById(
+                    "requestStatus"
+                ).value,
+
+                remarks:
+                    document.getElementById(
+                        "requestRemarks"
+                    ).value.trim()
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response =
+                        await fetch(
+                            "/api/material-requests/" + id,
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(request)
+
+                            }
+                        );
+
+                } else {
+
+                    response =
+                        await fetch(
+                            "/api/material-requests",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(request)
+
+                            }
+                        );
+
+                }
+
+
+                if (!response.ok) {
+
+                    const errorText =
+                        await response.text();
+
+                    console.error(
+                        "Server response:",
+                        errorText
+                    );
+
+                    throw new Error(
+                        "Failed to save material request"
+                    );
+
+                }
+
+
+                closeRequestModal();
+
+                await loadRequestData();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error saving material request:",
+                    error
+                );
+
+                alert(
+                    "Could not save material request."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       DELETE MATERIAL REQUEST
+       ===================================================== */
+
+    async function deleteRequest(id) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this material request?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/material-requests/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to delete material request"
+                );
+
+            }
+
+
+            await loadRequestData();
+
+
+        } catch (error) {
+
+            console.error(
+                "Error deleting material request:",
+                error
+            );
+
+            alert(
+                "Could not delete material request."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODALS WHEN CLICKING OUTSIDE
+       ===================================================== */
+
+    window.addEventListener(
+        "click",
+        function(event) {
+
+            const inventoryModal =
+                document.getElementById(
+                    "inventoryModal"
+                );
+
+
+            const requestModal =
+                document.getElementById(
+                    "requestModal"
+                );
+
+
+            if (
+                event.target ===
+                inventoryModal
+            ) {
+
+                closeModal();
+
+            }
+
+
+            if (
+                event.target ===
+                requestModal
+            ) {
+
+                closeRequestModal();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       NOTIFICATION SYSTEM
+       ===================================================== */
+
+    let currentUserId = null;
+
+    let notifications = [];
+
+
+    /* =====================================================
+       GET CURRENT USER
+       ===================================================== */
+
+    async function loadCurrentUser() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/users/current"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not identify current user"
+                );
+
+            }
+
+
+            const user =
+                await response.json();
+
+
+            currentUserId =
+                user.userId;
+
+
+            await loadNotifications();
+
+        } catch (error) {
+
+            console.error(
+                "Error loading current user:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LOAD NOTIFICATIONS
+       ===================================================== */
+
+    async function loadNotifications() {
+
+        if (!currentUserId) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/notifications/user/${currentUserId}`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load notifications"
+                );
+
+            }
+
+
+            notifications =
+                await response.json();
+
+
+            displayNotifications();
+
+        } catch (error) {
+
+            console.error(
+                "Error loading notifications:",
+                error
+            );
+
+
+            const list =
+                document.getElementById(
+                    "notificationList"
+                );
+
+
+            if (list) {
+
+                list.innerHTML = `
+
+                    <div class="notification-empty">
+
+                        Could not load notifications.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DISPLAY NOTIFICATIONS
+       ===================================================== */
+
+    function displayNotifications() {
+
+        const list =
+            document.getElementById(
+                "notificationList"
+            );
+
+
+        const badge =
+            document.getElementById(
+                "notificationBadge"
+            );
+
+
+        const countText =
+            document.getElementById(
+                "notificationCount"
+            );
+
+
+        if (!list || !badge || !countText) {
+            return;
+        }
+
+
+        list.innerHTML = "";
+
+
+        const unread =
+            notifications.filter(
+                n =>
+                    n.status === "UNREAD"
+            );
+
+
+        /* BADGE */
+
+        if (unread.length > 0) {
+
+            badge.textContent =
+                unread.length > 99
+                    ? "99+"
+                    : unread.length;
+
+            badge.style.display =
+                "flex";
+
+        } else {
+
+            badge.style.display =
+                "none";
+
+        }
+
+
+        /* COUNT */
+
+        countText.textContent =
+            unread.length +
+            " unread";
+
+
+        /* EMPTY */
+
+        if (notifications.length === 0) {
+
+            list.innerHTML = `
+
+                <div class="notification-empty">
+
+                    🔔
+
+                    <br><br>
+
+                    No notifications yet.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* SHOW LATEST 8 */
+
+        notifications
+            .slice(0, 8)
+            .forEach(notification => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "notification-item " +
+                    (
+                        notification.status ===
+                        "UNREAD"
+                            ? "unread"
+                            : ""
+                    );
+
+
+                const icon =
+                    getNotificationIcon(
+                        notification.type
+                    );
+
+
+                item.innerHTML = `
+
+                    <div class="notification-item-top">
+
+                        <div class="notification-icon">
+
+                            ${icon}
+
+                        </div>
+
+
+                        <div class="notification-content">
+
+                            <div class="notification-title">
+
+                                ${escapeHtml(
+                    notification.title
+                )}
+
+                            </div>
+
+
+                            <div class="notification-message">
+
+                                ${escapeHtml(
+                    notification.message
+                )}
+
+                            </div>
+
+
+                            <div class="notification-time">
+
+                                ${formatNotificationTime(
+                    notification.createdAt
+                )}
+
+                            </div>
+
+
+                            ${
+                    notification.status ===
+                    "UNREAD"
+
+                        ? `
+
+                                    <button
+                                        type="button"
+                                        class="notification-read-button"
+                                        onclick="
+                                            markNotificationRead(
+                                                ${notification.notificationId},
+                                                event
+                                            )
+                                        ">
+
+                                        Mark as read
+
+                                    </button>
+
+                                  `
+
+                        : ""
+                }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(item);
+
+            });
+
+    }
+
+
+    /* =====================================================
+       NOTIFICATION ICON
+       ===================================================== */
+
+    function getNotificationIcon(type) {
+
+        switch (type) {
+
+            case "EQUIPMENT_REQUEST":
+                return "⚙";
+
+            case "EQUIPMENT_RESPONSE":
+                return "🏗";
+
+            case "MATERIAL_REQUEST":
+                return "📦";
+
+            case "LOW_STOCK":
+                return "⚠";
+
+            case "SITE_ISSUE":
+                return "🚧";
+
+            case "ATTENDANCE_ISSUE":
+                return "✓";
+
+            case "PROGRESS_UPDATE":
+                return "📈";
+
+            default:
+                return "🔔";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MARK ONE AS READ
+       ===================================================== */
+
+    async function markNotificationRead(
+        id,
+        event
+    ) {
+
+        if (event) {
+            event.stopPropagation();
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/notifications/${id}/read`,
+                    {
+                        method: "PUT"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to mark notification as read"
+                );
+
+            }
+
+
+            await loadNotifications();
+
+        } catch (error) {
+
+            console.error(
+                "Error marking notification as read:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MARK ALL AS READ
+       ===================================================== */
+
+    async function markAllNotificationsRead() {
+
+        const unread =
+            notifications.filter(
+                n =>
+                    n.status === "UNREAD"
+            );
+
+
+        for (const notification of unread) {
+
+            try {
+
+                await fetch(
+                    `/api/notifications/${notification.notificationId}/read`,
+                    {
+                        method: "PUT"
+                    }
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+
+        await loadNotifications();
+
+    }
+
+
+    /* =====================================================
+       TOGGLE NOTIFICATION DROPDOWN
+       ===================================================== */
+
+    function toggleNotifications(event) {
+
+        event.stopPropagation();
+
+
+        const dropdown =
+            document.getElementById(
+                "notificationDropdown"
+            );
+
+
+        if (!dropdown) {
+            return;
+        }
+
+
+        dropdown.classList.toggle(
+            "show"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLOSE NOTIFICATIONS WHEN CLICKING OUTSIDE
+       ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const wrapper =
+                document.querySelector(
+                    ".notification-wrapper"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "notificationDropdown"
+                );
+
+
+            if (
+                wrapper &&
+                dropdown &&
+                !wrapper.contains(
+                    event.target
+                )
+            ) {
+
+                dropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ESCAPE HTML
+       ===================================================== */
+
+    function escapeHtml(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+
+        }
+
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =====================================================
+       FORMAT NOTIFICATION TIME
+       ===================================================== */
+
+    function formatNotificationTime(
+        dateValue
+    ) {
+
+        if (!dateValue) {
+            return "";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+            return dateValue;
+        }
+
+
+        return date.toLocaleString();
+
+    }
+
+
+    /* =====================================================
+       INITIAL PAGE LOAD
+       ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function() {
+
+            await loadInventory();
+
+            await loadRequestData();
+
+            await loadCurrentUser();
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>
+```

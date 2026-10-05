@@ -15,13 +15,25 @@ public class MaterialRequestController {
 
     public MaterialRequestController(
             MaterialRequestService requestService) {
+
         this.requestService = requestService;
     }
 
+
+    // =========================
+    // GET ALL REQUESTS
+    // =========================
+
     @GetMapping
     public List<MaterialRequest> getAllRequests() {
+
         return requestService.getAllRequests();
     }
+
+
+    // =========================
+    // GET REQUEST BY ID
+    // =========================
 
     @GetMapping("/{id}")
     public ResponseEntity<MaterialRequest> getRequestById(
@@ -32,14 +44,25 @@ public class MaterialRequestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
+    // =========================
+    // CREATE REQUEST
+    // =========================
+
     @PostMapping
     public ResponseEntity<MaterialRequest> createRequest(
             @RequestBody MaterialRequest request) {
 
-        return ResponseEntity.ok(
-                requestService.saveRequest(request)
-        );
+        MaterialRequest savedRequest =
+                requestService.saveRequest(request);
+
+        return ResponseEntity.ok(savedRequest);
     }
+
+
+    // =========================
+    // UPDATE REQUEST
+    // =========================
 
     @PutMapping("/{id}")
     public ResponseEntity<MaterialRequest> updateRequest(
@@ -47,19 +70,29 @@ public class MaterialRequestController {
             @RequestBody MaterialRequest request) {
 
         try {
-            return ResponseEntity.ok(
-                    requestService.updateRequest(id, request)
-            );
+
+            MaterialRequest updatedRequest =
+                    requestService.updateRequest(id, request);
+
+            return ResponseEntity.ok(updatedRequest);
+
         } catch (RuntimeException e) {
+
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    // =========================
+    // DELETE REQUEST
+    // =========================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRequest(
             @PathVariable Integer id) {
 
         if (requestService.getRequestById(id).isEmpty()) {
+
             return ResponseEntity.notFound().build();
         }
 
