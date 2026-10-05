@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+    ```
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clients | Construct Management</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+
+        /* =========================================================
+           CLIENT PAGE - INDEPENDENT LAYOUT
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .client-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+
+        .client-sidebar {
+            width: 245px;
+            min-width: 245px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            background: #111827;
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+        }
+
+        .client-brand {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .client-brand-icon {
+            width: 42px;
+            height: 42px;
+
+            background: #f59e0b;
+            color: white;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+            font-weight: bold;
+
+            margin-right: 12px;
+        }
+
+        .client-brand-text strong {
+            display: block;
+            font-size: 17px;
+            letter-spacing: 1px;
+        }
+
+        .client-brand-text small {
+            color: #9ca3af;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .client-navigation {
+            padding: 25px 14px;
+            flex: 1;
+        }
+
+        .client-navigation a {
+            display: flex;
+            align-items: center;
+
+            height: 46px;
+            padding: 0 15px;
+
+            margin-bottom: 7px;
+
+            color: #d1d5db;
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .client-navigation a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .client-navigation a.active {
+            background: #f59e0b;
+            color: white;
+            font-weight: bold;
+        }
+
+        .client-navigation .nav-icon {
+            width: 30px;
+            font-size: 17px;
+        }
+
+        .client-sidebar-footer {
+            padding: 18px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+
+        /* =========================================================
+           MAIN AREA
+           ========================================================= */
+
+        .client-main {
+            margin-left: 245px;
+
+            width: calc(100% - 245px);
+            min-height: 100vh;
+
+            padding: 32px;
+        }
+
+
+        /* =========================================================
+           TOP BAR
+           ========================================================= */
+
+        .client-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .client-heading h1 {
+            margin: 0;
+            font-size: 30px;
+            color: #111827;
+        }
+
+        .client-heading p {
+            margin: 7px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .client-add-btn {
+            border: none;
+            background: #f59e0b;
+            color: white;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow: 0 4px 10px rgba(245,158,11,0.25);
+        }
+
+        .client-add-btn:hover {
+            background: #d97706;
+        }
+
+
+        /* =========================================================
+           SUMMARY CARDS
+           ========================================================= */
+
+        .client-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .summary-box {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            border: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 10px;
+
+            background: #fff7ed;
+            color: #f59e0b;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+
+            margin-right: 15px;
+        }
+
+        .summary-info span {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .summary-info strong {
+            font-size: 23px;
+            color: #111827;
+        }
+
+
+        /* =========================================================
+           MESSAGE
+           ========================================================= */
+
+        .client-message {
+            display: none;
+
+            padding: 13px 16px;
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+        }
+
+        .client-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .client-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        /* =========================================================
+           FORM PANEL
+           ========================================================= */
+
+        .client-form-panel {
+            display: none;
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .client-form-panel.show {
+            display: block;
+        }
+
+        .client-form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+        .client-form-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .client-close {
+            border: none;
+            background: #f3f4f6;
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+        }
+
+        .client-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        .client-field label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            color: #374151;
+        }
+
+        .client-field input {
+            width: 100%;
+
+            padding: 11px 13px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .client-field input:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+        }
+
+        .client-form-actions {
+            display: flex;
+            gap: 10px;
+
+            margin-top: 22px;
+        }
+
+        .client-save {
+            border: none;
+
+            background: #16a34a;
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .client-cancel {
+            border: none;
+
+            background: #6b7280;
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           CLIENT LIST
+           ========================================================= */
+
+        .client-list-panel {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+
+            overflow: hidden;
+        }
+
+        .client-list-header {
+            padding: 22px 24px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .client-list-header h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .client-list-header span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .client-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        .client-table th {
+            background: #f9fafb;
+
+            color: #6b7280;
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+
+            padding: 14px 18px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .client-table td {
+            padding: 16px 18px;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            font-size: 14px;
+
+            color: #374151;
+        }
+
+        .client-table tbody tr:hover {
+            background: #fffbeb;
+        }
+
+        .client-id {
+            font-weight: bold;
+            color: #f59e0b;
+        }
+
+        .client-name-cell {
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .client-email {
+            color: #2563eb;
+        }
+
+        .client-actions {
+            white-space: nowrap;
+        }
+
+        .client-edit {
+            border: none;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            margin-right: 5px;
+        }
+
+        .client-delete {
+            border: none;
+
+            background: #fef2f2;
+            color: #dc2626;
+
+            padding: 7px 12px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .client-edit:hover {
+            background: #dbeafe;
+        }
+
+        .client-delete:hover {
+            background: #fee2e2;
+        }
+
+        .client-empty {
+            text-align: center;
+
+            padding: 50px;
+
+            color: #9ca3af;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .client-sidebar {
+                width: 210px;
+                min-width: 210px;
+            }
+
+            .client-main {
+                margin-left: 210px;
+                width: calc(100% - 210px);
+                padding: 25px;
+            }
+
+            .client-summary {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .client-sidebar {
+                position: relative;
+
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+            }
+
+            .client-layout {
+                display: block;
+            }
+
+            .client-main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .client-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .client-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+    ```
+
+</head>
+
+<body>
+
+<div class="client-layout">
+
+    ```
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="client-sidebar">
+
+        <div class="client-brand">
+
+            <div class="client-brand-icon">
+                C
+            </div>
+
+            <div class="client-brand-text">
+                <strong>CONSTRUCT</strong>
+                <small>MANAGEMENT</small>
+            </div>
+
+        </div>
+
+
+        <nav class="client-navigation">
+
+            <a href="/dashboard">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects">
+                <span class="nav-icon">▤</span>
+                Projects
+            </a>
+
+            <a href="/clients" class="active">
+                <span class="nav-icon">👤</span>
+                Clients
+            </a>
+
+            <a href="/contractors">
+                <span class="nav-icon">🏗</span>
+                Contractors
+            </a>
+
+            <a href="/sites">
+                <span class="nav-icon">⌂</span>
+                Sites
+            </a>
+
+            <a href="/workforce">
+                <span class="nav-icon">◉</span>
+                Workforce
+            </a>
+
+            <a href="/attendance">
+                <span class="nav-icon">✓</span>
+                Attendance
+            </a>
+
+            <a href="/inventory">
+                <span class="nav-icon">▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment">
+                <span class="nav-icon">⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs">
+                <span class="nav-icon">☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+
+        <div class="client-sidebar-footer">
+
+            <div class="online-status">
+                <span class="online-dot"></span>
+                System Online
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="client-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="client-topbar">
+
+            <div class="client-heading">
+
+                <h1>Clients</h1>
+
+                <p>
+                    Manage client profiles, contact details and relationships.
+                </p>
+
+            </div>
+
+
+            <button
+                    class="client-add-btn"
+                    onclick="showAddForm()">
+
+                + Add Client
+
+            </button>
+
+        </header>
+
+
+        <!-- SUMMARY -->
+
+        <section class="client-summary">
+
+            <div class="summary-box">
+
+                <div class="summary-icon">
+                    👥
+                </div>
+
+                <div class="summary-info">
+
+                    <span>Total Clients</span>
+
+                    <strong id="totalClients">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div class="summary-icon">
+                    ✉
+                </div>
+
+                <div class="summary-info">
+
+                    <span>Clients With Email</span>
+
+                    <strong id="emailClients">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div class="summary-icon">
+                    ✓
+                </div>
+
+                <div class="summary-info">
+
+                    <span>Active Records</span>
+
+                    <strong id="activeClients">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MESSAGE -->
+
+        <div
+                id="message"
+                class="client-message">
+        </div>
+
+
+        <!-- FORM -->
+
+        <section
+                id="clientFormPanel"
+                class="client-form-panel">
+
+            <div class="client-form-header">
+
+                <h2 id="formTitle">
+                    Add New Client
+                </h2>
+
+                <button
+                        class="client-close"
+                        onclick="hideForm()">
+                    ×
+                </button>
+
+            </div>
+
+
+            <input
+                    type="hidden"
+                    id="clientId">
+
+
+            <div class="client-form-grid">
+
+
+                <div class="client-field">
+
+                    <label>
+                        Client Name
+                    </label>
+
+                    <input
+                            type="text"
+                            id="clientName"
+                            placeholder="Enter client name">
+
+                </div>
+
+
+                <div class="client-field">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input
+                            type="text"
+                            id="phone"
+                            placeholder="Enter phone number">
+
+                </div>
+
+
+                <div class="client-field">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter email address">
+
+                </div>
+
+
+                <div class="client-field">
+
+                    <label>
+                        Address
+                    </label>
+
+                    <input
+                            type="text"
+                            id="address"
+                            placeholder="Enter address">
+
+                </div>
+
+            </div>
+
+
+            <div class="client-form-actions">
+
+                <button
+                        class="client-save"
+                        onclick="saveClient()">
+                    Save Client
+                </button>
+
+                <button
+                        class="client-cancel"
+                        onclick="hideForm()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- CLIENT LIST -->
+
+        <section class="client-list-panel">
+
+
+            <div class="client-list-header">
+
+                <div>
+
+                    <h2>
+                        Client Directory
+                    </h2>
+
+                    <span>
+                    Registered clients in the system
+                </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="client-table-wrapper">
+
+                <table class="client-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="clientTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+    ```
+
+</div>
+
+<script>
+
+    let editingClientId = null;
+
+
+    /* =========================================================
+       LOAD CLIENTS
+       ========================================================= */
+
+    async function loadClients() {
+
+        try {
+
+            const response =
+                await fetch('/api/clients');
+
+            if (!response.ok) {
+                throw new Error('Failed to load clients');
+            }
+
+            const clients =
+                await response.json();
+
+
+            const tableBody =
+                document.getElementById('clientTableBody');
+
+            tableBody.innerHTML = '';
+
+
+            if (clients.length === 0) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="client-empty">
+                            No clients found.
+                        </td>
+                    </tr>
+                `;
+
+            } else {
+
+                clients.forEach(client => {
+
+                    const row =
+                        document.createElement('tr');
+
+
+                    row.innerHTML = `
+
+                        <td class="client-id">
+                            #${client.clientId}
+                        </td>
+
+                        <td class="client-name-cell">
+                            ${client.clientName || ''}
+                        </td>
+
+                        <td>
+                            ${client.phone || '-'}
+                        </td>
+
+                        <td class="client-email">
+                            ${client.email || '-'}
+                        </td>
+
+                        <td>
+                            ${client.address || '-'}
+                        </td>
+
+                        <td class="client-actions">
+
+                            <button
+                                class="client-edit"
+                                onclick="editClient(${client.clientId})">
+                                Edit
+                            </button>
+
+                            <button
+                                class="client-delete"
+                                onclick="deleteClient(${client.clientId})">
+                                Delete
+                            </button>
+
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+            }
+
+
+            updateSummary(clients);
+
+
+        } catch (error) {
+
+            showMessage(
+                'Could not load clients.',
+                'error'
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+
+    function updateSummary(clients) {
+
+        document.getElementById('totalClients')
+            .textContent = clients.length;
+
+
+        const emailCount =
+            clients.filter(client =>
+                client.email &&
+                client.email.trim() !== ''
+            ).length;
+
+
+        document.getElementById('emailClients')
+            .textContent = emailCount;
+
+
+        document.getElementById('activeClients')
+            .textContent = clients.length;
+
+    }
+
+
+    /* =========================================================
+       SHOW ADD FORM
+       ========================================================= */
+
+    function showAddForm() {
+
+        editingClientId = null;
+
+
+        document.getElementById('formTitle')
+            .textContent = 'Add New Client';
+
+
+        document.getElementById('clientId')
+            .value = '';
+
+        document.getElementById('clientName')
+            .value = '';
+
+        document.getElementById('phone')
+            .value = '';
+
+        document.getElementById('email')
+            .value = '';
+
+        document.getElementById('address')
+            .value = '';
+
+
+        document.getElementById('clientFormPanel')
+            .classList.add('show');
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+    }
+
+
+    /* =========================================================
+       HIDE FORM
+       ========================================================= */
+
+    function hideForm() {
+
+        document.getElementById('clientFormPanel')
+            .classList.remove('show');
+
+    }
+
+
+    /* =========================================================
+       SAVE CLIENT
+       ========================================================= */
+
+    async function saveClient() {
+
+
+        const client = {
+
+            clientName:
+                document.getElementById('clientName').value.trim(),
+
+            phone:
+                document.getElementById('phone').value.trim(),
+
+            email:
+                document.getElementById('email').value.trim(),
+
+            address:
+                document.getElementById('address').value.trim()
+
+        };
+
+
+        if (!client.clientName) {
+
+            showMessage(
+                'Client name is required.',
+                'error'
+            );
+
+            return;
+        }
+
+
+        try {
+
+            let response;
+
+
+            if (editingClientId === null) {
+
+                response =
+                    await fetch(
+                        '/api/clients',
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify(client)
+                        }
+                    );
+
+            } else {
+
+                response =
+                    await fetch(
+                        `/api/clients/${editingClientId}`,
+                        {
+                            method: 'PUT',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify(client)
+                        }
+                    );
+
+            }
+
+
+            if (!response.ok) {
+                throw new Error('Save failed');
+            }
+
+
+            const wasEditing =
+                editingClientId !== null;
+
+
+            hideForm();
+
+            editingClientId = null;
+
+
+            await loadClients();
+
+
+            showMessage(
+                wasEditing
+                    ? 'Client updated successfully.'
+                    : 'Client created successfully.',
+                'success'
+            );
+
+
+        } catch (error) {
+
+            showMessage(
+                'Could not save client.',
+                'error'
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       EDIT CLIENT
+       ========================================================= */
+
+    async function editClient(id) {
+
+        try {
+
+            const response =
+                await fetch(`/api/clients/${id}`);
+
+
+            if (!response.ok) {
+                throw new Error('Client not found');
+            }
+
+
+            const client =
+                await response.json();
+
+
+            editingClientId = id;
+
+
+            document.getElementById('formTitle')
+                .textContent = 'Edit Client';
+
+
+            document.getElementById('clientId')
+                .value = client.clientId;
+
+            document.getElementById('clientName')
+                .value = client.clientName || '';
+
+            document.getElementById('phone')
+                .value = client.phone || '';
+
+            document.getElementById('email')
+                .value = client.email || '';
+
+            document.getElementById('address')
+                .value = client.address || '';
+
+
+            document.getElementById('clientFormPanel')
+                .classList.add('show');
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+
+        } catch (error) {
+
+            showMessage(
+                'Could not load client.',
+                'error'
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       DELETE CLIENT
+       ========================================================= */
+
+    async function deleteClient(id) {
+
+
+        if (!confirm(
+            'Are you sure you want to delete this client?'
+        )) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/clients/${id}`,
+                    {
+                        method: 'DELETE'
+                    }
+                );
+
+
+            if (!response.ok) {
+                throw new Error('Delete failed');
+            }
+
+
+            await loadClients();
+
+
+            showMessage(
+                'Client deleted successfully.',
+                'success'
+            );
+
+
+        } catch (error) {
+
+            showMessage(
+                'Could not delete client. The client may be linked to a project.',
+                'error'
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       MESSAGE
+       ========================================================= */
+
+    function showMessage(text, type) {
+
+        const message =
+            document.getElementById('message');
+
+
+        message.textContent = text;
+
+
+        message.className =
+            'client-message ' +
+            (type === 'success'
+                ? 'client-success'
+                : 'client-error');
+
+
+        message.style.display = 'block';
+
+
+        setTimeout(() => {
+
+            message.style.display = 'none';
+
+        }, 3000);
+
+    }
+
+
+    /* =========================================================
+       INITIAL LOAD
+       ========================================================= */
+
+    loadClients();
+
+</script>
+
+</body>
+</html>
+```
+
+### What is different
+
+This version **doesn't use your old `.dashboard`, `.sidebar`, `.page-content`, `.card`, `.nav-item`, etc. classes** for the actual layout.
+
+The structure is now:
+
+**Fixed 245px sidebar → full-width main area → summary cards → client directory**
+
+So your existing `style.css` should have much less opportunity to mess with the positioning.
+
+Also, I kept your **same `/api/clients` backend**, so you don't need to change `ClientController`, `ClientService`, the entity, or the database.
+
+After replacing it, **restart Spring Boot and open `/clients` again**.

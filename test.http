@@ -1,0 +1,18 @@
+### Create Site
+POST http://localhost:8080/api/sites
+Content-Type: application/json
+
+{
+  "projectId": 1,
+  "siteName": "Main Construction Site",
+  "location": "Colombo",
+  "status": "Active"
+}
+
+
+### Get All Sites
+GET http://localhost:8080/api/sites
+
+
+### Get Site By ID
+GET http://localhost:8080/api/sites/1

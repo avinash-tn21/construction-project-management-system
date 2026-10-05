@@ -1,0 +1,689 @@
+````
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">C</div>
+
+            <div>
+                <h2>CONSTRUCT</h2>
+                <span>MANAGEMENT</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="/dashboard"
+               class="nav-item active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/projects"
+               class="nav-item">
+                <span>▤</span>
+                Projects
+            </a>
+
+            <a href="/clients"
+               class="nav-item">
+                <span>👤</span>
+                Clients
+            </a>
+
+            <a href="/contractors"
+               class="nav-item">
+                <span>🏗</span>
+                Contractors
+            </a>
+
+            <a href="/sites"
+               class="nav-item">
+                <span>⌂</span>
+                Sites
+            </a>
+
+            <div class="nav-group">
+
+                <a href="/workforce"
+                   class="nav-item">
+                    <span>◉</span>
+                    Workforce
+                </a>
+
+                <a href="/attendance"
+                   class="nav-sub-item">
+                    <span>✓</span>
+                    Attendance
+                </a>
+
+            </div>
+
+            <a href="/inventory"
+               class="nav-item">
+                <span>▣</span>
+                Inventory
+            </a>
+
+            <a href="/equipment"
+               class="nav-item">
+                <span>⚙</span>
+                Equipment
+            </a>
+
+            <a href="/daily-logs"
+               class="nav-item">
+                <span>☷</span>
+                Daily Logs
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome">
+                    Welcome back
+                </p>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+            </div>
+
+
+            <div style="
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    ">
+
+                <!-- DATE & TIME -->
+
+                <div style="
+            text-align: right;
+        ">
+
+                    <div
+                            id="dashboardTime"
+                            style="
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #1f2937;
+                    ">
+                        00:00:00
+                    </div>
+
+                    <div
+                            id="dashboardDate"
+                            style="
+                        font-size: 11px;
+                        color: #9ca3af;
+                        margin-top: 3px;
+                    ">
+                        Loading date...
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- LOGOUT -->
+            <form action="/logout" method="post" style="margin: 0;">
+                <button type="submit"
+                        title="Logout"
+                        style="
+                                border: none;
+                                background: #f3f4f6;
+                                color: #374151;
+                                padding: 10px 16px;
+                                border-radius: 8px;
+                                font-size: 13px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                transition: 0.2s ease;
+                            "
+                        onmouseover="this.style.background='#fee2e2'; this.style.color='#dc2626';"
+                        onmouseout="this.style.background='#f3f4f6'; this.style.color='#374151';">
+                    ↪ Logout
+                </button>
+            </form>
+
+        </header>
+
+
+
+        <!-- ========================= -->
+        <!-- STATISTICS -->
+        <!-- ========================= -->
+
+        <section class="stats-grid">
+
+
+            <!-- ACTIVE PROJECTS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ▤
+                </div>
+
+                <div>
+
+                    <p>
+                        Active Projects
+                    </p>
+
+                    <h2 th:text="${activeProjects}">
+                        0
+                    </h2>
+
+                    <span class="positive"
+                          th:text="${totalProjects + ' total projects'}">
+                        0 total projects
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVE SITES -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⌂
+                </div>
+
+                <div>
+
+                    <p>
+                        Active Sites
+                    </p>
+
+                    <h2 th:text="${activeSites}">
+                        0
+                    </h2>
+
+                    <span class="positive">
+                        Operational
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- WORKERS -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ◉
+                </div>
+
+                <div>
+
+                    <p>
+                        Total Workers
+                    </p>
+
+                    <h2 th:text="${totalWorkers}">
+                        0
+                    </h2>
+
+                    <span class="positive"
+                          th:text="${presentToday + ' present today'}">
+                        0 present today
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- EQUIPMENT -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚙
+                </div>
+
+                <div>
+
+                    <p>
+                        Equipment
+                    </p>
+
+                    <h2 th:text="${totalEquipment}">
+                        0
+                    </h2>
+
+                    <span class="warning"
+                          th:text="${allocatedEquipment + ' allocated'}">
+                        0 allocated
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- CONTENT GRID -->
+        <!-- ========================= -->
+
+        <section class="content-grid">
+
+
+            <!-- ========================= -->
+            <!-- PROJECT PROGRESS -->
+            <!-- ========================= -->
+
+            <div class="panel progress-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="section-label">
+                            PROJECT OVERVIEW
+                        </p>
+
+                        <h2>
+                            Current Project Progress
+                        </h2>
+
+                    </div>
+
+                    <button
+                            class="view-button"
+                            onclick="window.location.href='/projects'">
+
+                        View All
+
+                    </button>
+
+                </div>
+
+
+                <div class="project-progress">
+
+
+                    <!-- PROJECT ROW -->
+
+                    <div
+                            class="project-row"
+                            th:each="item : ${projectDashboardData}">
+
+                        <div class="project-info">
+
+                            <strong
+                                    th:text="${item.project.projectName}">
+                                Project Name
+                            </strong>
+
+                            <span
+                                    th:text="${item.project.location != null
+                                    ? item.project.location
+                                    : 'No location specified'}">
+                                Project Location
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress-container">
+
+                            <div class="progress-bar">
+
+                                <div
+                                        class="progress-fill"
+                                        th:style="'width:' + ${item.progress} + '%;'">
+                                </div>
+
+                            </div>
+
+                            <strong
+                                    th:text="${item.progress + '%'}">
+                                0%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NO PROJECTS -->
+
+                    <div
+                            th:if="${#lists.isEmpty(projectDashboardData)}"
+                            style="
+                                padding: 30px;
+                                text-align: center;
+                                color: #9ca3af;
+                            ">
+
+                        No projects available yet.
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- QUICK ACTIONS -->
+            <!-- ========================= -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="section-label">
+                            QUICK ACTIONS
+                        </p>
+
+                        <h2>
+                            Manage Site
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="actions">
+
+
+                    <!-- NEW DAILY LOG -->
+
+                    <button
+                            class="action-button"
+                            onclick="window.location.href='/daily-logs'">
+
+                        <span>
+                            ＋
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                New Daily Log
+                            </strong>
+
+                            <small>
+                                Record today's activities
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                    <!-- ADD WORKER -->
+
+                    <button
+                            class="action-button"
+                            onclick="window.location.href='/workforce'">
+
+                        <span>
+                            ＋
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Add Worker
+                            </strong>
+
+                            <small>
+                                Register workforce
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                    <!-- MATERIAL REQUEST -->
+
+                    <button
+                            class="action-button"
+                            onclick="window.location.href='/inventory'">
+
+                        <span>
+                            ＋
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Material Request
+                            </strong>
+
+                            <small>
+                                Request site materials
+                            </small>
+
+                        </div>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- RECENT ACTIVITIES -->
+        <!-- ========================= -->
+
+        <section class="panel activity-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <p class="section-label">
+                        SITE MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Recent Site Activities
+                    </h2>
+
+                </div>
+
+                <button
+                        class="view-button"
+                        onclick="window.location.href='/daily-logs'">
+
+                    View Logs
+
+                </button>
+
+            </div>
+
+
+            <div class="activity-list">
+
+
+                <!-- ACTIVITY -->
+
+                <div
+                        class="activity"
+                        th:each="progress : ${recentProgress}">
+
+                    <div class="activity-icon">
+                        ✓
+                    </div>
+
+
+                    <div>
+
+                        <strong
+                                th:text="${progress.activity}">
+                            Site activity
+                        </strong>
+
+                        <p>
+
+                            Project ID:
+                            <span
+                                    th:text="${progress.projectId}">
+                                -
+                            </span>
+
+                            ·
+
+                            <span
+                                    th:text="${progress.progressDate}">
+                                Date
+                            </span>
+
+                        </p>
+
+                    </div>
+
+
+                    <span
+                            class="activity-status progress"
+                            th:if="${progress.progressPercentage != null}"
+                            th:text="${progress.progressPercentage + '% Progress'}">
+
+                        Progress
+
+                    </span>
+
+
+                    <span
+                            class="activity-status completed"
+                            th:if="${progress.progressPercentage == null}">
+
+                        Recorded
+
+                    </span>
+
+                </div>
+
+
+                <!-- NO ACTIVITIES -->
+
+                <div
+                        th:if="${#lists.isEmpty(recentProgress)}"
+                        style="
+                            padding: 30px;
+                            text-align: center;
+                            color: #9ca3af;
+                        ">
+
+                    No site activities recorded yet.
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    function updateDashboardDateTime() {
+
+        const now = new Date();
+
+        // Live time
+        const time = now.toLocaleTimeString('en-LK', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+
+        // Current date
+        const date = now.toLocaleDateString('en-LK', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        document.getElementById('dashboardTime').textContent = time;
+        document.getElementById('dashboardDate').textContent = date;
+    }
+
+
+    // Show immediately
+    updateDashboardDateTime();
+
+    // Update every second
+    setInterval(updateDashboardDateTime, 1000);
+
+</script>
+
+</body>
+</html>
+
+
+
+
