@@ -6,12 +6,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface SiteProgressRepository
-        extends JpaRepository<SiteProgress, Integer> {
+public interface SiteProgressRepository extends JpaRepository<SiteProgress, Integer> {
 
+    // Used by the main management dashboard
     List<SiteProgress> findByProjectIdOrderByProgressDateDesc(
             Integer projectId
     );
 
-    Optional<SiteProgress> findByDailyLogId(Integer dailyLogId);
+    // Used by the client dashboard
+    List<SiteProgress> findByProjectIdOrderByProgressDateDescProgressIdDesc(
+            Integer projectId
+    );
+
+    // Used by DailySiteLogController
+    Optional<SiteProgress> findByDailyLogId(
+            Integer dailyLogId
+    );
 }
