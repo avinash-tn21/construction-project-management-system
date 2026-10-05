@@ -16,6 +16,25 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ClientAccessService clientAccessService;
 
+  project-management
+=======
+import com.example.construction.entity.Project;
+import com.example.construction.service.ClientAccessService;
+import com.example.construction.service.ProjectService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/projects")
+public class ProjectController {
+
+    private final ProjectService projectService;
+    private final ClientAccessService clientAccessService;
+
+  main
     public ProjectController(ProjectService projectService,
                              ClientAccessService clientAccessService) {
         this.projectService = projectService;
@@ -34,9 +53,15 @@ public class ProjectController {
         }
 
         return ResponseEntity.ok(projectService.getAllProjects());
+  project-management
     }
 
     @GetMapping("/{id}")
+=======
+    }
+
+    @GetMapping("/{id}")
+  main
     public ResponseEntity<Project> getProjectById(@PathVariable Integer id,
             org.springframework.security.core.Authentication authentication) {
         if (isClient(authentication)) {
@@ -46,6 +71,7 @@ public class ProjectController {
         }
 
         return projectService.getProjectById(id)
+  project-management
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -77,6 +103,39 @@ public class ProjectController {
 
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
+=======
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Project createProject(
+            @Valid @RequestBody Project project) {
+
+        return projectService.createProject(project);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(
+            @PathVariable Integer id,
+            @Valid @RequestBody Project project) {
+
+        try {
+            return ResponseEntity.ok(
+                    projectService.updateProject(id, project)
+            );
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(
+            @PathVariable Integer id) {
+
+        projectService.deleteProject(id);
+        return ResponseEntity.noContent().build();
+  main
     }
 
     private boolean isClient(org.springframework.security.core.Authentication authentication) {

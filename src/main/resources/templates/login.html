@@ -1,0 +1,762 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Construction Management System</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            /* Subtle construction background */
+            background:
+                    linear-gradient(
+                            rgba(15, 23, 42, 0.91),
+                            rgba(15, 23, 42, 0.94)
+                    ),
+                    url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+            overflow: hidden;
+        }
+
+        /* Subtle decorative circles */
+
+        body::before {
+            content: "";
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            border: 1px solid rgba(245, 158, 11, 0.12);
+            border-radius: 50%;
+
+            top: -250px;
+            right: -150px;
+
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+
+            width: 400px;
+            height: 400px;
+
+            border: 1px solid rgba(245, 158, 11, 0.08);
+            border-radius: 50%;
+
+            bottom: -220px;
+            left: -150px;
+
+            pointer-events: none;
+        }
+
+
+        /* MAIN LOGIN CARD */
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 900px;
+            min-height: 540px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            background: white;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            box-shadow:
+                    0 30px 80px rgba(0, 0, 0, 0.40);
+
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* =========================
+           LEFT SIDE
+           ========================= */
+
+        .brand-section {
+            background:
+                    linear-gradient(
+                            145deg,
+                            rgba(15, 23, 42, 0.97),
+                            rgba(30, 41, 59, 0.95)
+                    );
+
+            color: white;
+
+            padding: 55px 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        /* Construction-style background shapes */
+
+        .brand-section::before {
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+            height: 280px;
+
+            border: 2px solid rgba(245, 158, 11, 0.10);
+
+            transform: rotate(45deg);
+
+            right: -150px;
+            top: -100px;
+        }
+
+        .brand-section::after {
+            content: "";
+
+            position: absolute;
+
+            width: 200px;
+            height: 200px;
+
+            border: 2px solid rgba(245, 158, 11, 0.07);
+
+            transform: rotate(45deg);
+
+            left: -110px;
+            bottom: -100px;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            width: 64px;
+            height: 64px;
+
+            background: #f59e0b;
+
+            border-radius: 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                    0 10px 30px rgba(245, 158, 11, 0.25);
+
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* BRAND TITLE */
+
+        .brand-section h1 {
+            margin: 0;
+
+            font-size: 31px;
+
+            line-height: 1.15;
+
+            font-weight: 700;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-section h1 span {
+            color: #f59e0b;
+        }
+
+
+        /* DESCRIPTION */
+
+        .brand-section p {
+            margin: 18px 0 0;
+
+            color: #cbd5e1;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            max-width: 330px;
+
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* FEATURES */
+
+        .feature-list {
+            margin-top: 35px;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+
+            color: #e2e8f0;
+
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 28px;
+            height: 28px;
+
+            border-radius: 50%;
+
+            background: rgba(245, 158, 11, 0.13);
+
+            color: #f59e0b;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RIGHT SIDE
+           ========================= */
+
+        .login-section {
+            padding: 55px 50px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            background: #ffffff;
+        }
+
+
+        /* LOGIN HEADER */
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            margin: 0;
+
+            color: #111827;
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+        .login-header p {
+            margin: 8px 0 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           MESSAGES
+           ========================= */
+
+        .message {
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .error {
+            background: #fef2f2;
+
+            color: #b91c1c;
+
+            border: 1px solid #fecaca;
+        }
+
+        .logout {
+            background: #f0fdf4;
+
+            color: #15803d;
+
+            border: 1px solid #bbf7d0;
+        }
+
+
+        /* =========================
+           FORM
+           ========================= */
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* INPUT WRAPPER */
+
+        .input-wrapper {
+            position: relative;
+        }
+
+
+        /* INPUT ICON */
+
+        .input-icon {
+            position: absolute;
+
+            left: 14px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #94a3b8;
+
+            font-size: 15px;
+
+            pointer-events: none;
+        }
+
+
+        /* INPUT */
+
+        .form-group input {
+            width: 100%;
+
+            height: 48px;
+
+            padding: 0 14px 0 42px;
+
+            border: 1px solid #dbe2ea;
+
+            border-radius: 10px;
+
+            background: #f8fafc;
+
+            color: #1e293b;
+
+            font-size: 14px;
+
+            transition: all 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #a1aab8;
+        }
+
+        .form-group input:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-group input:focus {
+            outline: none;
+
+            background: #ffffff;
+
+            border-color: #f59e0b;
+
+            box-shadow:
+                    0 0 0 3px rgba(245, 158, 11, 0.12);
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+           ========================= */
+
+        .login-button {
+            width: 100%;
+
+            height: 49px;
+
+            margin-top: 5px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #f59e0b,
+                            #d97706
+                    );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+
+            box-shadow:
+                    0 8px 18px rgba(245, 158, 11, 0.22);
+        }
+
+        .login-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                    0 11px 23px rgba(245, 158, 11, 0.30);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+
+        /* SECURITY NOTE */
+
+        .security-note {
+            margin-top: 25px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+        .security-note span {
+            color: #64748b;
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 750px) {
+
+            body {
+                padding: 18px;
+
+                overflow: auto;
+            }
+
+            .login-wrapper {
+                max-width: 450px;
+
+                grid-template-columns: 1fr;
+            }
+
+            .brand-section {
+                padding: 35px 30px;
+
+                min-height: 280px;
+            }
+
+            .brand-section h1 {
+                font-size: 27px;
+            }
+
+            .brand-section p {
+                margin-top: 12px;
+            }
+
+            .feature-list {
+                display: none;
+            }
+
+            .login-section {
+                padding: 35px 30px 40px;
+            }
+        }
+
+
+        @media (max-width: 420px) {
+
+            .brand-section {
+                padding: 30px 25px;
+            }
+
+            .login-section {
+                padding: 30px 25px 35px;
+            }
+
+            .brand-section h1 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<div class="login-wrapper">
+
+
+    <!-- =========================
+         LEFT BRANDING
+         ========================= -->
+
+    <div class="brand-section">
+
+        <div class="logo">
+            🏗️
+        </div>
+
+
+        <h1>
+            Construction<br>
+            <span>Management</span>
+        </h1>
+
+
+        <p>
+            Manage projects, sites, equipment,
+            workforce and inventory from one
+            centralized system.
+        </p>
+
+
+        <div class="feature-list">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                Project Management
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                Equipment & Inventory
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                Workforce Management
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LOGIN
+         ========================= -->
+
+    <div class="login-section">
+
+
+        <div class="login-header">
+
+            <h2>
+                Welcome back
+            </h2>
+
+            <p>
+                Sign in to access your management dashboard.
+            </p>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div th:if="${param.error}"
+             class="message error">
+
+            <span>⚠</span>
+
+            <span>
+                Invalid username or password.
+            </span>
+
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <div th:if="${param.logout}"
+             class="message logout">
+
+            <span>✓</span>
+
+            <span>
+                You have been logged out successfully.
+            </span>
+
+        </div>
+
+
+        <!-- LOGIN FORM -->
+
+        <form method="post" action="/login">
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required>
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                    type="submit"
+                    class="login-button">
+
+                Sign In
+
+            </button>
+
+
+        </form>
+
+
+        <div class="security-note">
+
+            🔐
+            <span>
+                Secure access to the Construction Management System
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
+```
