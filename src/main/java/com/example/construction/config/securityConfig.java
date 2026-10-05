@@ -2,7 +2,6 @@ package com.example.construction.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,90 +15,350 @@ public class securityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
         http
+
+                // =========================
+                // CSRF
+                // =========================
+
                 .csrf(csrf -> csrf.disable())
+
+
+                // =========================
+                // AUTHORIZATION
+                // =========================
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Login page
+
+                        // =========================
+                        // PUBLIC
+                        // =========================
+
                         .requestMatchers(
                                 "/login",
                                 "/style.css",
                                 "/error"
                         ).permitAll()
 
-                        // Client and contractor areas
-                        .requestMatchers("/client/**").hasRole("CLIENT")
-                        .requestMatchers("/contractor/**").hasRole("CONTRACTOR")
 
-                        // Management pages
-                        .requestMatchers("/dashboard", "/projects", "/clients",
-                                "/contractors").hasRole("PROJECT_MANAGER")
-                        .requestMatchers("/workforce", "/attendance")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR")
-                        .requestMatchers("/sites", "/daily-logs")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR")
-                        .requestMatchers("/inventory").hasRole("INVENTORY_MANAGER")
-                        .requestMatchers("/equipment").hasRole("EQUIPMENT_MANAGER")
-                        .requestMatchers("/notifications").authenticated()
+                        // =========================
+                        // CLIENT
+                        // =========================
 
-                        // Client read-only project information. Ownership is
-                        // checked in the relevant controllers/services.
-                        .requestMatchers(HttpMethod.GET, "/api/projects/**",
-                                "/api/sites/**", "/api/tasks/**",
-                                "/api/milestones/**", "/api/daily-site-logs/**")
-                        .hasAnyRole("CLIENT", "PROJECT_MANAGER", "SITE_SUPERVISOR",
-                                "INVENTORY_MANAGER", "EQUIPMENT_MANAGER")
+                        .requestMatchers("/client/**")
+                        .hasRole("CLIENT")
 
-                        // Project-management APIs
-                        .requestMatchers("/api/projects/**", "/api/clients/**",
-                                "/api/contractors/**", "/api/tasks/**",
-                                "/api/milestones/**")
-                        .hasRole("PROJECT_MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/api/sites/**")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR",
-                                "INVENTORY_MANAGER", "EQUIPMENT_MANAGER")
+
+                        // =========================
+                        // MANAGEMENT PAGES
+                        // =========================
+
+                        .requestMatchers(
+                                "/dashboard",
+                                "/projects",
+                                "/clients",
+                                "/contractors",
+                                "/workforce",
+                                "/attendance",
+                                "/sites",
+                                "/daily-logs",
+                                "/inventory",
+                                "/equipment",
+                                "/notifications"
+                        )
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // PROJECT API
+                        // =========================
+
+                        .requestMatchers("/api/projects/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // CLIENT API
+                        // =========================
+
+                        .requestMatchers("/api/clients/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // CONTRACTOR API
+                        // =========================
+
+                        .requestMatchers("/api/contractors/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // TASK API
+                        // =========================
+
+                        .requestMatchers("/api/tasks/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // MILESTONE API
+                        // =========================
+
+                        .requestMatchers("/api/milestones/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // SITE API
+                        // =========================
+
                         .requestMatchers("/api/sites/**")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR")
-                        .requestMatchers("/api/workers/**", "/api/attendance/**")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // WORKFORCE API
+                        // =========================
+
+                        .requestMatchers("/api/workers/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // ATTENDANCE API
+                        // =========================
+
+                        .requestMatchers("/api/attendance/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // DAILY LOG API
+                        // =========================
+
                         .requestMatchers("/api/daily-site-logs/**")
-                        .hasAnyRole("PROJECT_MANAGER", "SITE_SUPERVISOR")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
 
-                        // Inventory and equipment APIs
-                        .requestMatchers("/api/inventory/**", "/api/material-requests/**")
-                        .hasRole("INVENTORY_MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/api/equipment/**",
-                                "/api/equipment-allocations/**")
-                        .hasAnyRole("PROJECT_MANAGER", "EQUIPMENT_MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/api/equipment-allocations/**")
-                        .hasAnyRole("PROJECT_MANAGER", "EQUIPMENT_MANAGER")
-                        .requestMatchers("/api/equipment/**", "/api/equipment-allocations/**")
-                        .hasRole("EQUIPMENT_MANAGER")
 
-                        // User and notification data are always scoped to the
-                        // authenticated user by their controllers.
-                        .requestMatchers("/api/users/**", "/api/notifications/**")
+                        // =========================
+                        // INVENTORY API
+                        // =========================
+
+                        .requestMatchers("/api/inventory/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // MATERIAL REQUEST API
+                        // =========================
+
+                        .requestMatchers("/api/material-requests/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // EQUIPMENT API
+                        // =========================
+
+                        .requestMatchers("/api/equipment/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // EQUIPMENT ALLOCATION API
+                        // =========================
+
+                        .requestMatchers("/api/equipment-allocations/**")
+                        .hasAnyRole(
+                                "PROJECT_MANAGER",
+                                "CONTRACTOR",
+                                "SITE_SUPERVISOR",
+                                "INVENTORY_MANAGER",
+                                "EQUIPMENT_MANAGER",
+                                "EMPLOYEE_MANAGER",
+                                "CLIENT_MANAGER"
+                        )
+
+
+                        // =========================
+                        // USERS
+                        // =========================
+
+                        .requestMatchers("/api/users/**")
                         .authenticated()
+
+
+                        // =========================
+                        // NOTIFICATIONS
+                        // =========================
+
+                        .requestMatchers("/api/notifications/**")
+                        .authenticated()
+
+
+                        // =========================
+                        // POST LOGIN
+                        // =========================
+
+                        .requestMatchers("/post-login")
+                        .authenticated()
+
+
+                        // =========================
+                        // EVERYTHING ELSE
+                        // =========================
 
                         .anyRequest().authenticated()
                 )
 
+
+                // =========================
+                // LOGIN
+                // =========================
+
                 .formLogin(form -> form
+
                         .loginPage("/login")
-                        .defaultSuccessUrl("/post-login", true)
-                        .failureUrl("/login?error=true")
+
+                        .defaultSuccessUrl(
+                                "/post-login",
+                                true
+                        )
+
+                        .failureUrl(
+                                "/login?error=true"
+                        )
+
                         .permitAll()
                 )
 
+
+                // =========================
+                // LOGOUT
+                // =========================
+
                 .logout(logout -> logout
+
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
+
+                        .logoutSuccessUrl(
+                                "/login?logout=true"
+                        )
+
                         .permitAll()
                 );
+
 
         return http.build();
     }
